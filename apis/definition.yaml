@@ -1,0 +1,66 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xwizs.demo.wiz.io
+spec:
+  group: demo.wiz.io
+  names:
+    kind: XWiz
+    plural: xwizs
+  claimNames:
+    kind: Wiz
+    plural: wizs
+  versions:
+  - name: v1alpha1
+    served: true
+    referenceable: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              id:
+                type: string
+                description: ID of the environment
+              eks:
+                type: object
+                properties:
+                  k8Version:
+                    type: string
+                    description: k8s version 1.28
+                  iam:
+                    type: object
+                    description: IAM configuration to connect as ClusterAdmin.
+                    properties:
+                      awsArn:
+                        description: Arn of top level user
+                        type: string
+                      #roleArn:
+                      #  description: The IAM Role ARN to connect as ClusterAdmin.
+                      #  type: string
+                      #  default: roleArn
+                      #userArn:
+                      #  description: The IAM User ARN to connect as ClusterAdmin.
+                      #  type: string
+                      #  default: userArn
+                      #autoscalerArn:
+                      #  description: The AutoScaler Role ARN to connect as ClusterAdmin.
+                      #  type: string
+                      #  default: autoscalerArn
+                    required:
+                      - awsArn
+                required:
+                  - k8Version
+                  - iam
+            required:
+            - id
+            - eks
+          status:
+            description: Get the private IP of the EC2 instance
+            properties:
+              dbIp:
+                description: get the private ip
+                type: string
+            type: object

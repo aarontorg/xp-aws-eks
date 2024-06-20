@@ -1,0 +1,13 @@
+apiVersion: demo.wiz.io/v1alpha1
+kind: XK8s
+metadata:
+  name: wiz-demo-1
+spec:
+  id: wiz-demo-1
+  k8Version: "1.29"
+  iam:
+    awsArn: arn:aws:iam::058264154390:root
+    #roleArn: arn:aws:iam::058264154390:role/k8sadmin
+    #userArn: arn:aws:iam::058264154390:user/wiz-demo-k8sadmin
+    #autoscalerArn: arn:aws:iam::058264154390:role/k8sadmin
+

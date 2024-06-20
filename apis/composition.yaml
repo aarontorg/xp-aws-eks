@@ -1,0 +1,48 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: xwizs.demo.wiz.io
+spec:
+  compositeTypeRef:
+    apiVersion: demo.wiz.io/v1alpha1
+    kind: XWiz
+  resources:
+    - base:
+        apiVersion: demo.wiz.io/v1alpha1
+        kind: XNetwork
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: spec.id
+      name: compositeNetwork
+    - base:
+        apiVersion: demo.wiz.io/v1alpha1
+        kind: XK8s
+      name: compositeK8s
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: spec.id
+        - fromFieldPath: spec.eks.k8Version
+          toFieldPath: spec.k8Version
+        - fromFieldPath: spec.eks.iam.awsArn
+          toFieldPath: spec.iam.awsArn
+    - base:
+        apiVersion: demo.wiz.io/v1alpha1
+        kind: XEc2
+      name: mongodDB
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: spec.id
+        - fromFieldPath: status.privateIp
+          toFieldPath: status.dbIp
+          type: ToCompositeFieldPath
+    - base:
+        apiVersion: demo.wiz.io/v1alpha1
+        kind: XApp
+      name: taskyWebApp
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: spec.id
+        - fromFieldPath: status.dbIp
+          toFieldPath: spec.dbIp
+          policy:
+            fromFieldPath: Required

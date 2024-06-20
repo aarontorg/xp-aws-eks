@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: wiz-demo-test
+  namespace: wiz-demo-1
+---
+apiVersion: rbac.authorization.k8s.io/v1
+# This cluster role binding allows anyone in the "manager" group to read secrets in any namespace.
+kind: ClusterRoleBinding
+metadata:
+  name: wiz-demo-test
+subjects:
+  - kind: ServiceAccount
+    name: wiz-demo-test
+    namespace: wiz-demo-1 # Name is case sensitive
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
