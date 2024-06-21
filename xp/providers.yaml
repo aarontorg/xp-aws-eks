@@ -12,12 +12,23 @@ metadata:
 spec:
   package: xpkg.upbound.io/upbound/provider-aws-ec2:v1.4.0
 ---
+kind: ControllerConfig
+metadata:
+  name: aws-config
+spec:
+  args: ['-d']
+  env:
+    - name: AWS_REGION
+      value: us-west-1
+---
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
   name: provider-aws-iam
 spec:
   package: xpkg.upbound.io/upbound/provider-aws-iam:v1.4.0
+  controllerConfigRef:
+    name: aws-config
 ---
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
