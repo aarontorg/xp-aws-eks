@@ -1,25 +1,25 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: xnetworks.demo.wiz.io
+  name: xnetworks.xp.sapns2.io
 spec:
   writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
-    apiVersion: demo.wiz.io/v1alpha1
+    apiVersion: xp.sapns2.io/v1alpha1
     kind: XNetwork
   patchSets:
     - name: network-id
       patches:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.id
-          toFieldPath: metadata.labels[networks.demo.wiz.io/network-id]
+          toFieldPath: metadata.labels[networks.xp.sapns2.io/network-id]
   resources:
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
         kind: VPC
         spec:
           forProvider:
-            region: us-west-2
+            region: us-gov-west-1
             cidrBlock: 192.168.0.0/16
             enableDnsSupport: true
             enableDnsHostNames: true
@@ -34,16 +34,16 @@ spec:
         kind: Subnet
         metadata:
           labels:
-            zone: us-west-2a
+            zone: us-gov-west-1a
             access: public
         spec:
           forProvider:
-            region: us-west-2
+            region: us-gov-west-1
             mapPublicIpOnLaunch: true
             cidrBlock: 192.168.0.0/18
             vpcIdSelector:
               matchControllerRef: true
-            availabilityZone: us-west-2a
+            availabilityZone: us-gov-west-1a
             tags:
               kubernetes.io/role/elb: "1"
       name: subnet-public-west-2a
@@ -67,16 +67,16 @@ spec:
         kind: Subnet
         metadata:
           labels:
-            zone: us-west-2b
+            zone: us-gov-west-1b
             access: public
         spec:
           forProvider:
-            region: us-west-2
+            region: us-gov-west-1
             mapPublicIpOnLaunch: true
             cidrBlock: 192.168.64.0/18
             vpcIdSelector:
               matchControllerRef: true
-            availabilityZone: us-west-2b
+            availabilityZone: us-gov-west-1b
             tags:
               kubernetes.io/role/elb: "1"
       name: subnet-public-west-2b
@@ -100,15 +100,15 @@ spec:
         kind: Subnet
         metadata:
           labels:
-            zone: us-west-2a
+            zone: us-gov-west-1a
             access: private
         spec:
           forProvider:
-            region: us-west-2
+            region: us-gov-west-1
             cidrBlock: 192.168.128.0/18
             vpcIdSelector:
               matchControllerRef: true
-            availabilityZone: us-west-2a
+            availabilityZone: us-gov-west-1a
             tags:
               kubernetes.io/role/internal-elb: "1"
       name: subnet-private-west-2a
@@ -132,15 +132,15 @@ spec:
         kind: Subnet
         metadata:
           labels:
-            zone: us-west-2b
+            zone: us-gov-west-1b
             access: private
         spec:
           forProvider:
-            region: us-west-2
+            region: us-gov-west-1
             cidrBlock: 192.168.192.0/18
             vpcIdSelector:
               matchControllerRef: true
-            availabilityZone: us-west-2b
+            availabilityZone: us-gov-west-1b
             tags:
               kubernetes.io/role/internal-elb: "1"
       name: subnet-private-west-2b
@@ -165,7 +165,7 @@ spec:
         kind: InternetGateway
         spec:
           forProvider:
-            region: us-west-2
+            region: us-gov-west-1
       name: gateway
       patches:
         - fromFieldPath: spec.id
@@ -175,7 +175,7 @@ spec:
                 fmt: '%s-ig'
               type: string
         - fromFieldPath: spec.id
-          toFieldPath: spec.forProvider.vpcIdSelector.matchLabels[networks.demo.wiz.io/network-id]
+          toFieldPath: spec.forProvider.vpcIdSelector.matchLabels[networks.xp.sapns2.io/network-id]
         - type: PatchSet
           patchSetName: network-id
         - fromFieldPath: spec.id
@@ -185,13 +185,13 @@ spec:
         kind: RouteTable
         spec:
           forProvider:
-            region: us-west-2
+            region: us-gov-west-1
             vpcIdSelector:
               matchControllerRef: true
       name: routeTable
       patches:
         - fromFieldPath: spec.id
-          toFieldPath: spec.forProvider.vpcIdSelector.matchLabels[networks.demo.wiz.io/network-id]
+          toFieldPath: spec.forProvider.vpcIdSelector.matchLabels[networks.xp.sapns2.io/network-id]
         - type: PatchSet
           patchSetName: network-id
         - fromFieldPath: spec.id
@@ -208,7 +208,7 @@ spec:
         spec:
           forProvider:
             destinationCidrBlock: 0.0.0.0/0
-            region: us-west-2
+            region: us-gov-west-1
       name: publicRoute
       patches:
         - fromFieldPath: spec.id
@@ -228,7 +228,7 @@ spec:
         kind: MainRouteTableAssociation
         spec:
           forProvider:
-            region: us-west-2
+            region: us-gov-west-1
             routeTableIdSelector:
               matchControllerRef: true
             vpcIdSelector:
@@ -249,13 +249,13 @@ spec:
         kind: RouteTableAssociation
         spec:
           forProvider:
-            region: us-west-2
+            region: us-gov-west-1
             routeTableIdSelector:
               matchControllerRef: true
             subnetIdSelector:
               matchControllerRef: true
               matchLabels:
-                zone: us-west-2a
+                zone: us-gov-west-1a
                 access: public
       name: routetableAssociation-public-a
       patches:
@@ -276,13 +276,13 @@ spec:
         kind: RouteTableAssociation
         spec:
           forProvider:
-            region: us-west-2
+            region: us-gov-west-1
             routeTableIdSelector:
               matchControllerRef: true
             subnetIdSelector:
               matchControllerRef: true
               matchLabels:
-                zone: us-west-2b
+                zone: us-gov-west-1b
                 access: public
       name: routetableAssociation-public-b
       patches:
@@ -303,13 +303,13 @@ spec:
         kind: RouteTableAssociation
         spec:
           forProvider:
-            region: us-west-2
+            region: us-gov-west-1
             routeTableIdSelector:
               matchControllerRef: true
             subnetIdSelector:
               matchControllerRef: true
               matchLabels:
-                zone: us-west-2a
+                zone: us-gov-west-1a
                 access: private
       name: routetableAssociation-private-a
       patches:
@@ -330,13 +330,13 @@ spec:
         kind: RouteTableAssociation
         spec:
           forProvider:
-            region: us-west-2
+            region: us-gov-west-1
             routeTableIdSelector:
               matchControllerRef: true
             subnetIdSelector:
               matchControllerRef: true
               matchLabels:
-                zone: us-west-2b
+                zone: us-gov-west-1b
                 access: private
       name: routetableAssociation-private-b
       patches:

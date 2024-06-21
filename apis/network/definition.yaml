@@ -1,9 +1,9 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: CompositeResourceDefinition
 metadata:
-  name: xnetworks.demo.wiz.io
+  name: xnetworks.xp.sapns2.io
 spec:
-  group: demo.wiz.io
+  group: xp.sapns2.io
   names:
     kind: XNetwork
     plural: xnetworks
