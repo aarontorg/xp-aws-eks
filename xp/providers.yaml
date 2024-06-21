@@ -12,7 +12,7 @@ metadata:
 spec:
   package: xpkg.upbound.io/upbound/provider-aws-ec2:v1.4.0
 ---
-apiVersion: pkg.crossplane.io/v1
+apiVersion: pkg.crossplane.io/v1alpha1
 kind: ControllerConfig
 metadata:
   name: aws-config
