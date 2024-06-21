@@ -27,6 +27,6 @@ spec:
     source: Custom
     url:
       dynamic:
-        host: 'amazonaws.com'
+        host: 'us-gov-west-1.amazonaws.com'
         protocol: https
       type: Dynamic
