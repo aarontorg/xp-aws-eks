@@ -23,7 +23,7 @@ spec:
       key: creds
   endpoint:
     partitionId: aws-us-gov
-    signingRegion: us-gov-west-1
+    #signingRegion: us-gov-west-1
     source: Custom
     url:
       dynamic:
