@@ -1,0 +1,24 @@
+apiVersion: iam.aws.upbound.io/v1beta1
+kind: Role
+metadata:
+  name: levelup-s3-iam-role-CHANGE-ME
+  labels:
+    role: levelup-s3-iam-role-CHANGE-ME
+    crossplane-demo: aws-levelup-managed-resources
+spec:
+  forProvider:
+    assumeRolePolicy: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": [
+                  "s3.amazonaws.com"
+              ]
+            },
+            "Action": "sts:AssumeRole"
+          }
+        ]
+      }
