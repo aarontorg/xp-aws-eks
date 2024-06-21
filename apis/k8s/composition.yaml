@@ -1,11 +1,11 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: xeks.k8s.demo.wiz.io
+  name: xeks.k8s.xp.sapns2.io
 spec:
   writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
-    apiVersion: demo.wiz.io/v1alpha1
+    apiVersion: xp.sapns2.io/v1alpha1
     kind: XK8s
   resources:
     ## K8s
@@ -79,7 +79,7 @@ spec:
                     access: public
       patches:
         - fromFieldPath: spec.id
-          toFieldPath: spec.forProvider.vpcConfig[0].subnetIdSelector.matchLabels[networks.demo.wiz.io/network-id]
+          toFieldPath: spec.forProvider.vpcConfig[0].subnetIdSelector.matchLabels[networks.xp.sapns2.io/network-id]
           type: FromCompositeFieldPath
         - fromFieldPath: spec.k8Version
           toFieldPath: spec.forProvider.version
@@ -276,7 +276,7 @@ spec:
                 access: public
       patches:
         - fromFieldPath: spec.id
-          toFieldPath: spec.forProvider.subnetIdSelector.matchLabels[networks.demo.wiz.io/network-id]
+          toFieldPath: spec.forProvider.subnetIdSelector.matchLabels[networks.xp.sapns2.io/network-id]
           type: FromCompositeFieldPath
         - fromFieldPath: status.atProvider.clusterName
           policy:

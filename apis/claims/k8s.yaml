@@ -1,4 +1,4 @@
-apiVersion: demo.wiz.io/v1alpha1
+apiVersion: xp.sapns2.io/v1alpha1
 kind: XK8s
 metadata:
   name: wiz-demo-1

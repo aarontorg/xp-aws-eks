@@ -1,7 +1,7 @@
-apiVersion: demo.wiz.io/v1alpha1
+apiVersion: xp.sapns2.io/v1alpha1
 kind: XNetwork
 metadata:
-  name: wiz-demo-1
+  name: aws-garden-eks1
 spec:
-  id: wiz-demo-1
+  id: aws-garden-eks1
   #region: "us-west-2"
