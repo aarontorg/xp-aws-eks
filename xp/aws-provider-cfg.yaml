@@ -9,3 +9,24 @@ spec:
       namespace: crossplane-system
       name: aws-secret
       key: creds
+---
+apiVersion: aws.upbound.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: gov
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      namespace: crossplane-system
+      name: aws-secret
+      key: creds
+  endpoint:
+    partitionId: aws-us-gov
+    signingRegion: us-gov-west-1
+    source: Custom
+    url:
+      dynamic:
+        host: 'iam.us-gov.amazonaws.com'
+        protocol: https
+      type: dynamic
