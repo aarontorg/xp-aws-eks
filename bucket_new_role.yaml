@@ -1,11 +1,12 @@
 apiVersion: iam.aws.upbound.io/v1beta1
 kind: Role
 metadata:
-  name: levelup-s3-iam-role-CHANGE-ME
+  name: gardener-iam-role
   labels:
-    role: levelup-s3-iam-role-CHANGE-ME
-    crossplane-demo: aws-levelup-managed-resources
+    role: gardener-iam-role
 spec:
+  providerConfigRef:
+    name: gov
   forProvider:
     assumeRolePolicy: |
       {

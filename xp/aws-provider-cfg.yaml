@@ -29,4 +29,4 @@ spec:
       dynamic:
         host: 'iam.us-gov.amazonaws.com'
         protocol: https
-      type: dynamic
+      type: Dynamic
