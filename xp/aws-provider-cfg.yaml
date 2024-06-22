@@ -19,7 +19,7 @@ spec:
     source: Secret
     secretRef:
       namespace: crossplane-system
-      name: aws-secret
+      name: aws-secret-gov
       key: creds
   endpoint:
     partitionId: aws-us-gov
