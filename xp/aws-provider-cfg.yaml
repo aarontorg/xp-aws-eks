@@ -28,9 +28,6 @@ items:
         signingRegion: us-gov-west-1
         #signingName: iam
         source: Custom
-        skip_region_validation: true
-        skip_requesting_account_id: true
-        skip_credentials_validation: true
         url:
           type: Static
           static: 'https://iam.us-gov.amazonaws.com'
@@ -38,3 +35,6 @@ items:
           #  host: 'iam.us-gov.amazonaws.com'
           #  protocol: https
           #type: Dynamic
+      skip_region_validation: true
+      skip_requesting_account_id: true
+      skip_credentials_validation: true
