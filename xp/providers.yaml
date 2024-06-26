@@ -30,8 +30,8 @@ kind: Provider
 metadata:
   name: provider-aws-iam
 spec:
-  package: xpkg.upbound.io/upbound/provider-aws-iam:v1.1.0
-  #package: xpkg.upbound.io/upbound/provider-aws-iam:v1.4.0
+  #package: xpkg.upbound.io/upbound/provider-aws-iam:v1.1.0
+  package: xpkg.upbound.io/upbound/provider-aws-iam:v1.4.0
   controllerConfigRef:
     name: aws-config
 ---
