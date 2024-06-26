@@ -17,8 +17,8 @@ kind: ControllerConfig
 metadata:
   name: aws-config
 spec:
-  args:
-    - --debug
+  podSecurityContext:
+    fsGroup: 2000
   env:
     - name: AWS_REGION
       value: us-gov-west-1
