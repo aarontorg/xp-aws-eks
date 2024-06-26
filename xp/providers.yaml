@@ -17,6 +17,8 @@ kind: ControllerConfig
 metadata:
   name: aws-config
 spec:
+  args:
+    - --debug
   env:
     - name: AWS_REGION
       value: us-gov-west-1
