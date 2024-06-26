@@ -15,7 +15,7 @@ do
   secret=$(kubectl get secret -n crossplane-system | awk '{print $1}' | grep "${xk8sUid}-ekscluster")
   print "secretName: $secret"
   kubeconfig=$(kubectl get secret $secret -o=jsonpath='{.data.kubeconfig}' -n crossplane-system)
-  echo "$kubeconfig" | base64 --decode > /Users/torg/.kube/$clusterName
+  echo "$kubeconfig" | base64 --decode > ~/.kube/$clusterName
 
 done
 
