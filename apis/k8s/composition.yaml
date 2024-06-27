@@ -582,3 +582,28 @@ spec:
             - string:
                 fmt: '%s-k8s-admin-user'
               type: string
+    - name: providerConfigHelm
+      base:
+        apiVersion: helm.crossplane.io/v1beta1
+        kind: ProviderConfig
+        spec:
+          credentials:
+            secretRef:
+              key: kubeconfig
+              namespace: crossplane-system
+            source: Secret
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.writeConnectionSecretToRef.namespace
+          toFieldPath: spec.credentials.secretRef.namespace
+          type: FromCompositeFieldPath
+        - fromFieldPath: metadata.uid
+          toFieldPath: spec.credentials.secretRef.name
+          transforms:
+            - string:
+                fmt: '%s-ekscluster'
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
