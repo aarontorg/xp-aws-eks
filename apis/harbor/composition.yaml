@@ -16,7 +16,7 @@ spec:
           forProvider:
             chart:
               name: harbor
-              repository: https://helm.goharbor.io/harbor
+              repository: https://helm.goharbor.io
             namespace: harbor
             set:
               - name: param1
