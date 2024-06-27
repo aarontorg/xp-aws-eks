@@ -15,7 +15,7 @@ spec:
             "sts:AssumeRole"
           ],
           "Resource": [
-            "arn:aws-us-gov:iam::892749690363:role/aws-garden-eks1-k8s-admin-role"
+            "arn:aws-us-gov:iam::892749690363:user/aws-gardener-admin"
           ]
         }]
       }
