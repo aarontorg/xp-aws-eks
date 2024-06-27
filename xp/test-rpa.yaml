@@ -8,6 +8,5 @@ spec:
   forProvider:
     policyArn: arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
     roleSelector:
-      matchControllerRef: true
       matchLabels:
         role: xp-test-controlplane
