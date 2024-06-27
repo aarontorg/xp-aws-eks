@@ -18,12 +18,12 @@ spec:
               name: harbor
               repository: https://helm.goharbor.io
             namespace: harbor
-            set:
-              - name: param1
-                value: value2
+            #set:
+            #  - name: param1
+            #    value: value2
             values:
-              service:
-                type: ClusterIP
+              expose:
+                type: loadBalancer
           providerConfigRef:
             name: helm-provider
       patches:
