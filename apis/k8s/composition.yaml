@@ -49,8 +49,6 @@ spec:
         apiVersion: iam.aws.upbound.io/v1beta1
         kind: RolePolicyAttachment
         spec:
-          providerConfigRef:
-            name: gov
           forProvider:
             policyArn: arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
             roleSelector:
@@ -191,8 +189,6 @@ spec:
         apiVersion: iam.aws.upbound.io/v1beta1
         kind: RolePolicyAttachment
         spec:
-          providerConfigRef:
-            name: gov
           forProvider:
             policyArn: arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
             roleSelector:
@@ -211,8 +207,6 @@ spec:
         apiVersion: iam.aws.upbound.io/v1beta1
         kind: RolePolicyAttachment
         spec:
-          providerConfigRef:
-            name: gov
           forProvider:
             policyArn: arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
             roleSelector:
@@ -231,8 +225,6 @@ spec:
         apiVersion: iam.aws.upbound.io/v1beta1
         kind: RolePolicyAttachment
         spec:
-          providerConfigRef:
-            name: gov
           forProvider:
             policyArn: arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy
             roleSelector:
@@ -251,8 +243,6 @@ spec:
         apiVersion: iam.aws.upbound.io/v1beta1
         kind: RolePolicyAttachment
         spec:
-          providerConfigRef:
-            name: gov
           forProvider:
             policyArn: arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
             roleSelector:
@@ -587,9 +577,6 @@ spec:
       base:
         apiVersion: iam.aws.upbound.io/v1beta1
         kind: UserPolicyAttachment
-        spec:
-          providerConfigRef:
-            name: gov
       patches:
         - fromFieldPath: spec.id
           toFieldPath: metadata.name
