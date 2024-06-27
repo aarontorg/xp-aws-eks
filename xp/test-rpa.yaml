@@ -1,0 +1,13 @@
+apiVersion: iam.aws.upbound.io/v1beta1
+kind: RolePolicyAttachment
+metadata:
+  name: xp-test-rpa
+spec:
+  providerConfigRef:
+    name: gov
+  forProvider:
+    policyArn: arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
+    roleSelector:
+      matchControllerRef: true
+      matchLabels:
+        role: xp-test-controlplane

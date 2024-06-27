@@ -1,9 +1,9 @@
 apiVersion: iam.aws.upbound.io/v1beta1
 kind: Role
 metadata:
-  name: gardener-iam-role
+  name: xp-test-controlplane
   labels:
-    role: gardener-iam-role
+    role: xp-test-controlplane
 spec:
   providerConfigRef:
     name: gov
@@ -12,14 +12,16 @@ spec:
       {
         "Version": "2012-10-17",
         "Statement": [
-          {
-            "Effect": "Allow",
-            "Principal": {
-              "Service": [
-                  "s3.amazonaws.com"
-              ]
-            },
-            "Action": "sts:AssumeRole"
-          }
+            {
+                "Effect": "Allow",
+                "Principal": {
+                    "Service": [
+                        "eks.amazonaws.com"
+                    ]
+                },
+                "Action": [
+                    "sts:AssumeRole"
+                ]
+            }
         ]
       }

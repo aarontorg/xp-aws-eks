@@ -1,7 +1,7 @@
 apiVersion: iam.aws.upbound.io/v1beta1
 kind: Policy
 metadata:
-  name: blargg
+  name: xp-test-policy
 spec:
   forProvider:
     policy: |
