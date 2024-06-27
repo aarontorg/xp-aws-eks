@@ -545,9 +545,9 @@ spec:
       base:
         apiVersion: iam.aws.upbound.io/v1beta1
         kind: Policy
-        spec:
-          providerConfigRef:
-            name: gov
+        #spec:
+        #  providerConfigRef:
+        #    name: gov
       patches:
         - fromFieldPath: spec.id
           toFieldPath: metadata.name
