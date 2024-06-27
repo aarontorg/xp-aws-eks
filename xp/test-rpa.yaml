@@ -3,10 +3,8 @@ kind: RolePolicyAttachment
 metadata:
   name: xp-test-rpa
 spec:
-  providerConfigRef:
-    name: gov
   forProvider:
-    policyArn: arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
+    policyArn: arn:aws-us-gov:iam::aws:policy/AmazonEKSClusterPolicy
     roleSelector:
       matchLabels:
         role: xp-test-controlplane
