@@ -1,0 +1,21 @@
+apiVersion: iam.aws.upbound.io/v1beta1
+kind: Policy
+metadata:
+  name: blargg
+spec:
+  providerConfigRef:
+    name: gov
+  forProvider:
+    policy: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [{
+          "Effect": "Allow",
+          "Action": [
+            "sts:AssumeRole"
+          ],
+          "Resource": [
+            "arn:aws-us-gov:iam::892749690363:role/aws-garden-eks1-k8s-admin-role"
+          ]
+        }]
+      }
