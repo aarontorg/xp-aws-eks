@@ -1,7 +1,5 @@
 #! /bin/zsh
 
-# Simple script to update kubeconfig for all eks clusters
-
 # shellcheck disable=SC2207
 xk8s=( $(kubectl get xk8s | grep -v NAME | awk '{print $1}') )
 declare -a xk8s
@@ -18,5 +16,3 @@ do
   echo "$kubeconfig" | base64 --decode > ~/.kube/$clusterName
 
 done
-
-
