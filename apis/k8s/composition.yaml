@@ -226,7 +226,7 @@ spec:
         kind: RolePolicyAttachment
         spec:
           forProvider:
-            policyArn: arn:aws-us-gov:iam:policy/service-role/AmazonEBSCSIDriverPolicy
+            policyArn: arn:aws-us-gov:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy
             roleSelector:
               matchControllerRef: true
               matchLabels:
