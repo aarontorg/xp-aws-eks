@@ -50,7 +50,7 @@ spec:
         kind: RolePolicyAttachment
         spec:
           forProvider:
-            policyArn: arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
+            policyArn: arn:aws-us-gov:iam::aws:policy/AmazonEKSClusterPolicy
             roleSelector:
               matchControllerRef: true
               matchLabels:
@@ -190,7 +190,7 @@ spec:
         kind: RolePolicyAttachment
         spec:
           forProvider:
-            policyArn: arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+            policyArn: arn:aws-us-gov:iam::aws:policy/AmazonEKSWorkerNodePolicy
             roleSelector:
               matchControllerRef: true
               matchLabels:
@@ -208,7 +208,7 @@ spec:
         kind: RolePolicyAttachment
         spec:
           forProvider:
-            policyArn: arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+            policyArn: arn:aws-us-gov:iam::aws:policy/AmazonEKS_CNI_Policy
             roleSelector:
               matchControllerRef: true
               matchLabels:
@@ -226,7 +226,7 @@ spec:
         kind: RolePolicyAttachment
         spec:
           forProvider:
-            policyArn: arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy
+            policyArn: arn:aws-us-gov:iam:policy/service-role/AmazonEBSCSIDriverPolicy
             roleSelector:
               matchControllerRef: true
               matchLabels:
@@ -244,7 +244,7 @@ spec:
         kind: RolePolicyAttachment
         spec:
           forProvider:
-            policyArn: arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+            policyArn: arn:aws-us-gov:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
             roleSelector:
               matchControllerRef: true
               matchLabels:
