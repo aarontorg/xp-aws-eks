@@ -24,6 +24,9 @@ spec:
             values:
               expose:
                 type: loadBalancer
+                tls:
+                  auto:
+                    commonName: "ns2-test-harbor"
           providerConfigRef:
             name: helm-provider
       patches:
