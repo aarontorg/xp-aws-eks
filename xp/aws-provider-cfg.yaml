@@ -56,6 +56,6 @@ items:
         source: Custom
         url:
           type: Static
-          static: 'https://ecr.us-gov-west-1.amazonaws.com'
+          static: 'https://api.ecr.us-gov-west-1.amazonaws.com'
       skip_region_validation: true
       skip_credentials_validation: true
