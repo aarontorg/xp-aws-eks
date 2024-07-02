@@ -6,7 +6,7 @@ spec:
   writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
     apiVersion: xp.sapns2.io/v1alpha1
-    kind: XRepository
+    kind: XRepositorys
   resources:
     - name: ecrRepository
       base:

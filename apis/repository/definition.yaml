@@ -5,7 +5,7 @@ metadata:
 spec:
   group: xp.sapns2.io
   names:
-    kind: XRepository
+    kind: XRepositorys
     plural: xrepositorys
   versions:
   - name: v1alpha1
