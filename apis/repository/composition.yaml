@@ -20,6 +20,6 @@ spec:
           toFieldPath: metadata.name
           transforms:
             - string:
-                fmt: '%s-harbor'
+                fmt: '%s-helm-repo'
                 type: Format
               type: string
