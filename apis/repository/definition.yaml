@@ -1,11 +1,11 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: CompositeResourceDefinition
 metadata:
-  name: xrepositories.xp.sapns2.io
+  name: xrepositorys.xp.sapns2.io
 spec:
   group: xp.sapns2.io
   names:
-    kind: XRepositories
+    kind: XRepository
     plural: xrepositorys
   versions:
   - name: v1alpha1
