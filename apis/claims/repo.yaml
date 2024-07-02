@@ -1,0 +1,6 @@
+apiVersion: xp.sapns2.io/v1alpha1
+kind: XRepositories
+metadata:
+  name: aws-garden-eks1
+spec:
+  id: aws-garden-eks1
