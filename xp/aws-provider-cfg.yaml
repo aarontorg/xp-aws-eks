@@ -38,3 +38,24 @@ items:
       skip_region_validation: true
       #skip_requesting_account_id: true
       skip_credentials_validation: true
+  - apiVersion: aws.upbound.io/v1beta1
+    kind: ProviderConfig
+    metadata:
+      name: gov-ecr
+    spec:
+      credentials:
+        source: Secret
+        secretRef:
+          namespace: crossplane-system
+          name: aws-secret
+          key: creds
+      endpoint:
+        partitionId: aws-us-gov
+        signingRegion: us-gov-west-1
+        #signingName: iam
+        source: Custom
+        url:
+          type: Static
+          static: 'https://ecr.us-gov.amazonaws.com'
+      skip_region_validation: true
+      skip_credentials_validation: true

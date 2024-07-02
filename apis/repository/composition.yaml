@@ -13,6 +13,8 @@ spec:
         apiVersion: ecr.aws.upbound.io/v1beta1
         kind: Repository
         spec:
+          providerConfigRef:
+            name: gov-ecr
           forProvider:
             region: us-west-gov-1
       patches:
