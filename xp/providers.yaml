@@ -47,4 +47,4 @@ kind: Provider
 metadata:
   name: provider-aws-ecr
 spec:
-  package: xpkg.upbound.io/upbound/provider-aws-ecr:v1.4.0
+  package: xpkg.upbound.io/upbound/provider-aws-ecr:v1.8.0
