@@ -1,0 +1,38 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: xgardeners.k8s.xp.sapns2.io
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: xp.sapns2.io/v1alpha1
+    kind: XGardeners
+  resources:
+    - name: harborRelease
+      base:
+        apiVersion: helm.crossplane.io/v1beta1
+        kind: Release
+        spec:
+          forProvider:
+            chart:
+              name: harbor
+              repository: https://helm.goharbor.io
+            namespace: harbor
+            values:
+              expose:
+                type: loadBalancer
+                tls:
+                  auto:
+                    commonName: "ns2-test-harbor"
+          providerConfigRef:
+            name: helm-provider
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: spec.providerConfigRef.name
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-harbor'
+                type: Format
+              type: string
