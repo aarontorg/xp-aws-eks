@@ -19,7 +19,7 @@ spec:
               repository: https://892749690363.dkr.ecr.us-gov-west-1.amazonaws.com
               pullSecretRef:
                 name: aws-ecr-cred
-                namespace: harbor
+                namespace: crossplane-system
             namespace: gardener
             values:
           providerConfigRef:
