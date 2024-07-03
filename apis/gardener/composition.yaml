@@ -15,7 +15,7 @@ spec:
         spec:
           forProvider:
             chart:
-              #name: gardener-operator
+              name: gardener-operator
               version: 0.1.0
               repository: https://892749690363.dkr.ecr.us-gov-west-1.amazonaws.com/gardener-operator
               pullSecretRef:
