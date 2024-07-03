@@ -17,7 +17,7 @@ spec:
             chart:
               name: gardener-operator
               version: 0.1.0
-              repository: https://892749690363.dkr.ecr.us-gov-west-1.amazonaws.com/
+              repository: oci://892749690363.dkr.ecr.us-gov-west-1.amazonaws.com
               pullSecretRef:
                 name: aws-ecr-cred
                 namespace: crossplane-system
