@@ -8,22 +8,20 @@ spec:
     apiVersion: xp.sapns2.io/v1alpha1
     kind: XGardeners
   resources:
-    - name: harborRelease
+    - name: gardenerRelease
       base:
         apiVersion: helm.crossplane.io/v1beta1
         kind: Release
         spec:
           forProvider:
             chart:
-              name: harbor
+              name: gardener-operator
               repository: https://helm.goharbor.io
-            namespace: harbor
+              pullSecretRef:
+                name: aws-ecr-cred
+                namespace: harbor
+            namespace: gardener
             values:
-              expose:
-                type: loadBalancer
-                tls:
-                  auto:
-                    commonName: "ns2-test-harbor"
           providerConfigRef:
             name: helm-provider
       patches:
@@ -33,6 +31,6 @@ spec:
           toFieldPath: metadata.name
           transforms:
             - string:
-                fmt: '%s-harbor'
+                fmt: '%s-gardener'
                 type: Format
               type: string
