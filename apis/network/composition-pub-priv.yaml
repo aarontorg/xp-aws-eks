@@ -1,0 +1,354 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: xnetworks.xp.sapns2.io
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: xp.sapns2.io/v1alpha1
+    kind: XNetwork
+  patchSets:
+    - name: network-id
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.id
+          toFieldPath: metadata.labels[networks.xp.sapns2.io/network-id]
+  resources:
+    - base:
+        apiVersion: ec2.aws.upbound.io/v1beta1
+        kind: VPC
+        spec:
+          forProvider:
+            region: us-gov-west-1
+            cidrBlock: 192.168.0.0/16
+            enableDnsSupport: true
+            enableDnsHostNames: true
+      name: wiz-vcp
+      patches:
+        - type: PatchSet
+          patchSetName: network-id
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.tags.Name
+    - base:
+        apiVersion: ec2.aws.upbound.io/v1beta1
+        kind: Subnet
+        metadata:
+          labels:
+            zone: us-gov-west-1a
+            access: public
+        spec:
+          forProvider:
+            region: us-gov-west-1
+            mapPublicIpOnLaunch: true
+            cidrBlock: 192.168.0.0/18
+            vpcIdSelector:
+              matchControllerRef: true
+            availabilityZone: us-gov-west-1a
+            tags:
+              kubernetes.io/role/elb: "1"
+      name: subnet-public-west-2a
+      patches:
+        - type: PatchSet
+          patchSetName: network-id
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-public-a'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.tags.Name
+          transforms:
+            - string:
+                fmt: '%s-public-a'
+              type: string
+    - base:
+        apiVersion: ec2.aws.upbound.io/v1beta1
+        kind: Subnet
+        metadata:
+          labels:
+            zone: us-gov-west-1b
+            access: public
+        spec:
+          forProvider:
+            region: us-gov-west-1
+            mapPublicIpOnLaunch: true
+            cidrBlock: 192.168.64.0/18
+            vpcIdSelector:
+              matchControllerRef: true
+            availabilityZone: us-gov-west-1b
+            tags:
+              kubernetes.io/role/elb: "1"
+      name: subnet-public-west-2b
+      patches:
+        - type: PatchSet
+          patchSetName: network-id
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-public-b'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.tags.Name
+          transforms:
+            - string:
+                fmt: '%s-public-b'
+              type: string
+    - base:
+        apiVersion: ec2.aws.upbound.io/v1beta1
+        kind: Subnet
+        metadata:
+          labels:
+            zone: us-gov-west-1a
+            access: private
+        spec:
+          forProvider:
+            region: us-gov-west-1
+            cidrBlock: 192.168.128.0/18
+            vpcIdSelector:
+              matchControllerRef: true
+            availabilityZone: us-gov-west-1a
+            tags:
+              kubernetes.io/role/internal-elb: "1"
+      name: subnet-private-west-2a
+      patches:
+        - type: PatchSet
+          patchSetName: network-id
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-private-a'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.tags.Name
+          transforms:
+            - string:
+                fmt: '%s-private-a'
+              type: string
+    - base:
+        apiVersion: ec2.aws.upbound.io/v1beta1
+        kind: Subnet
+        metadata:
+          labels:
+            zone: us-gov-west-1b
+            access: private
+        spec:
+          forProvider:
+            region: us-gov-west-1
+            cidrBlock: 192.168.192.0/18
+            vpcIdSelector:
+              matchControllerRef: true
+            availabilityZone: us-gov-west-1b
+            tags:
+              kubernetes.io/role/internal-elb: "1"
+      name: subnet-private-west-2b
+      patches:
+        - type: PatchSet
+          patchSetName: network-id
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-private-b'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.tags.Name
+          transforms:
+            - string:
+                fmt: '%s-private-b'
+              type: string
+## Gateway and Routes
+    - base:
+        apiVersion: ec2.aws.upbound.io/v1beta1
+        kind: InternetGateway
+        spec:
+          forProvider:
+            region: us-gov-west-1
+      name: gateway
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-ig'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.vpcIdSelector.matchLabels[networks.xp.sapns2.io/network-id]
+        - type: PatchSet
+          patchSetName: network-id
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.tags.Name
+    - base:
+        apiVersion: ec2.aws.upbound.io/v1beta1
+        kind: RouteTable
+        spec:
+          forProvider:
+            region: us-gov-west-1
+            vpcIdSelector:
+              matchControllerRef: true
+      name: routeTable
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.vpcIdSelector.matchLabels[networks.xp.sapns2.io/network-id]
+        - type: PatchSet
+          patchSetName: network-id
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-routetable'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.tags.Name
+    - base:
+        apiVersion: ec2.aws.upbound.io/v1beta1
+        kind: Route
+        spec:
+          forProvider:
+            destinationCidrBlock: 0.0.0.0/0
+            region: us-gov-west-1
+      name: publicRoute
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.routeTableIdRef.name
+          transforms:
+            - string:
+                fmt: '%s-routetable'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.gatewayIdRef.name
+          transforms:
+            - string:
+                fmt: '%s-ig'
+              type: string
+    - base:
+        apiVersion: ec2.aws.upbound.io/v1beta1
+        kind: MainRouteTableAssociation
+        spec:
+          forProvider:
+            region: us-gov-west-1
+            routeTableIdSelector:
+              matchControllerRef: true
+            vpcIdSelector:
+              matchControllerRef: true
+      name: mainRouteTableAssociation
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.routeTableIdRef.name
+          transforms:
+            - string:
+                fmt: '%s-routetable'
+              type: string
+        - type: PatchSet
+          patchSetName: network-id
+
+    - base:
+        apiVersion: ec2.aws.upbound.io/v1beta1
+        kind: RouteTableAssociation
+        spec:
+          forProvider:
+            region: us-gov-west-1
+            routeTableIdSelector:
+              matchControllerRef: true
+            subnetIdSelector:
+              matchControllerRef: true
+              matchLabels:
+                zone: us-gov-west-1a
+                access: public
+      name: routetableAssociation-public-a
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.routeTableIdRef.name
+          transforms:
+            - string:
+                fmt: '%s-routetable'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-rta-public-a'
+              type: string
+    - base:
+        apiVersion: ec2.aws.upbound.io/v1beta1
+        kind: RouteTableAssociation
+        spec:
+          forProvider:
+            region: us-gov-west-1
+            routeTableIdSelector:
+              matchControllerRef: true
+            subnetIdSelector:
+              matchControllerRef: true
+              matchLabels:
+                zone: us-gov-west-1b
+                access: public
+      name: routetableAssociation-public-b
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.routeTableIdRef.name
+          transforms:
+            - string:
+                fmt: '%s-routetable'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-rta-public-b'
+              type: string
+    - base:
+        apiVersion: ec2.aws.upbound.io/v1beta1
+        kind: RouteTableAssociation
+        spec:
+          forProvider:
+            region: us-gov-west-1
+            routeTableIdSelector:
+              matchControllerRef: true
+            subnetIdSelector:
+              matchControllerRef: true
+              matchLabels:
+                zone: us-gov-west-1a
+                access: private
+      name: routetableAssociation-private-a
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.routeTableIdRef.name
+          transforms:
+            - string:
+                fmt: '%s-routetable'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-rta-private-a'
+              type: string
+    - base:
+        apiVersion: ec2.aws.upbound.io/v1beta1
+        kind: RouteTableAssociation
+        spec:
+          forProvider:
+            region: us-gov-west-1
+            routeTableIdSelector:
+              matchControllerRef: true
+            subnetIdSelector:
+              matchControllerRef: true
+              matchLabels:
+                zone: us-gov-west-1b
+                access: private
+      name: routetableAssociation-private-b
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.routeTableIdRef.name
+          transforms:
+            - string:
+                fmt: '%s-routetable'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-rta-private-b'
+              type: string
