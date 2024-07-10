@@ -25,7 +25,7 @@ spec:
           forProvider:
             cidrBlock: 192.168.0.0/16
             enableDnsSupport: true
-            enableDnsHostNames: true
+            enableDnsHostnames: true
       name: eks-vcp
       patches:
         - type: PatchSet
