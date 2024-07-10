@@ -5,6 +5,7 @@ metadata:
 spec:
   id: aws-garden-eks1
   k8Version: "1.29"
+  region: us-gov-west-1
   iam:
     awsArn: arn:aws-us-gov:iam::892749690363:user/aws-gardener-admin #arn:aws:iam::058264154390:root
     #roleArn: arn:aws:iam::058264154390:role/k8sadmin

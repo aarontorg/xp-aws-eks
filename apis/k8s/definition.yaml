@@ -21,6 +21,9 @@ spec:
               id:
                 type: string
                 description: ID of this environment to be used for naming
+              region:
+                type: string
+                description: aws region to use
               size:
                 type: string
                 description: Size of node.
@@ -44,6 +47,7 @@ spec:
             - id
             - k8Version
             - iam
+            - region
           status:
             description: A status represents the observed state
             properties:

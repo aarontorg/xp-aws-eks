@@ -7,6 +7,12 @@ spec:
   compositeTypeRef:
     apiVersion: xp.sapns2.io/v1alpha1
     kind: XK8s
+  patchSets:
+    - name: general
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.region
+          toFieldPath: spec.forProvider.region
   resources:
     ## K8s
     - name: controlplaneRole
@@ -68,7 +74,6 @@ spec:
         kind: Cluster
         spec:
           forProvider:
-            region: us-gov-west-1
             roleArnSelector:
               matchControllerRef: true
               matchLabels:
@@ -80,6 +85,8 @@ spec:
                   matchLabels:
                     access: private
       patches:
+        - type: PatchSet
+          patchSetName: general
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.vpcConfig[0].subnetIdSelector.matchLabels[networks.xp.sapns2.io/network-id]
           type: FromCompositeFieldPath
@@ -101,30 +108,18 @@ spec:
                 type: TrimPrefix
               type: string
           type: ToCompositeFieldPath
-        #- fromFieldPath: status.atProvider.roleArn
-        #  policy:
-        #    fromFieldPath: Optional
-        #  toFieldPath: status.eks.accountId
-        #  transforms:
-        #    - string:
-        #        regexp:
-        #          group: 1
-        #          match: arn:aws:iam::(\d+):.*
-        #        type: Regexp
-        #      type: string
-        #  type: ToCompositeFieldPath
         - fromFieldPath: status.atProvider.vpcConfig[0].clusterSecurityGroupId
           policy:
             fromFieldPath: Optional
           toFieldPath: status.eks.clusterSecurityGroupId
           type: ToCompositeFieldPath
+    ## ClusterAuth
     - name: kubernetesClusterAuth
       base:
         apiVersion: eks.aws.upbound.io/v1beta1
         kind: ClusterAuth
         spec:
           forProvider:
-            region: us-gov-west-1
             clusterNameSelector:
               matchControllerRef: true
       connectionDetails:
@@ -132,6 +127,8 @@ spec:
           name: kubeconfig
           type: FromConnectionSecretKey
       patches:
+        - type: PatchSet
+          patchSetName: general
         - fromFieldPath: spec.writeConnectionSecretToRef.namespace
           toFieldPath: spec.writeConnectionSecretToRef.namespace
           type: FromCompositeFieldPath
@@ -184,6 +181,7 @@ spec:
             - string:
                 fmt: '%s-nodegroup'
               type: string
+    ## Worker node policy attachment
     - name: workerNodeRolePolicyAttachment
       base:
         apiVersion: iam.aws.upbound.io/v1beta1
@@ -202,6 +200,7 @@ spec:
             - string:
                 fmt: '%s-ng-eksworker'
               type: string
+    ## Policy Attachment
     - name: cniRolePolicyAttachment
       base:
         apiVersion: iam.aws.upbound.io/v1beta1
@@ -262,7 +261,6 @@ spec:
         kind: NodeGroup
         spec:
           forProvider:
-            region: us-gov-west-1
             clusterNameSelector:
               matchControllerRef: true
             instanceTypes:
@@ -279,6 +277,8 @@ spec:
               matchLabels:
                 access: public
       patches:
+        - type: PatchSet
+          patchSetName: general
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.subnetIdSelector.matchLabels[networks.xp.sapns2.io/network-id]
           type: FromCompositeFieldPath
@@ -293,22 +293,26 @@ spec:
         kind: Addon
         spec:
           forProvider:
-            region: us-gov-west-1
             addonName: aws-ebs-csi-driver
             clusterNameSelector:
               matchControllerRef: true
+      patches:
+        - type: PatchSet
+          patchSetName: general
     - name: cniAddon
       base:
         apiVersion: eks.aws.upbound.io/v1beta1
         kind: Addon
         spec:
           forProvider:
-            region: us-gov-west-1
             addonName: vpc-cni
             clusterNameSelector:
               matchControllerRef: true
             preserve: false
             configurationValues: '{"env": {"AWS_VPC_K8S_CNI_CUSTOM_NETWORK_CFG":"false"}}'  # see https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md for different options
+      patches:
+        - type: PatchSet
+          patchSetName: general
     - name: oidcProvider
       base:
         apiVersion: iam.aws.upbound.io/v1beta1
