@@ -176,6 +176,8 @@ spec:
             - string:
                 fmt: '%s-rta-private-a'
               type: string
+        - patchSetName: network-general
+          type: PatchSet
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
         kind: RouteTableAssociation
@@ -207,6 +209,8 @@ spec:
             - string:
                 fmt: '%s-rta-private-b'
               type: string
+        - patchSetName: network-general
+          type: PatchSet
     ## Endpoint Security Group
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
