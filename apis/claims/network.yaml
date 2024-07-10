@@ -4,4 +4,4 @@ metadata:
   name: aws-garden-eks1
 spec:
   id: aws-garden-eks1
-  #region: "us-gov-west-1"
+  region: "us-gov-west-1"

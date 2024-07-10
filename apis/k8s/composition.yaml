@@ -75,10 +75,10 @@ spec:
                 role: controlplane
             vpcConfig:
               - endpointPrivateAccess: true
-                endpointPublicAccess: true
+                endpointPublicAccess: false
                 subnetIdSelector:
                   matchLabels:
-                    access: public
+                    access: private
       patches:
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.vpcConfig[0].subnetIdSelector.matchLabels[networks.xp.sapns2.io/network-id]
