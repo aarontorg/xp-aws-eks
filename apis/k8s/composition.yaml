@@ -275,7 +275,7 @@ spec:
                 minSize: 1
             subnetIdSelector:
               matchLabels:
-                access: public
+                access: private
       patches:
         - type: PatchSet
           patchSetName: general
