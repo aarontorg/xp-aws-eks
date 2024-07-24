@@ -111,9 +111,9 @@ spec:
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.vpcConfig[0].securityGroupIdRefs
           transforms:
-            - type: string
-              string:
+            - string:
                 fmt: "%s-endpoint-sg"
+              type: string
         - fromFieldPath: status.atProvider.vpcConfig[0].clusterSecurityGroupId
           policy:
             fromFieldPath: Optional
