@@ -539,6 +539,32 @@ spec:
               type: string
         - patchSetName: network-general
           type: PatchSet
+    ## VPCEndpointSecurityGroupAssociation - ecrApiEndpoint
+    - base:
+        apiVersion: ec2.aws.upbound.io/v1beta1
+        kind: VPCEndpointSecurityGroupAssociation
+      name: ecrDkrEndpoint-sga
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.vpcEndpointIdRef.name
+          transforms:
+            - string:
+                fmt: '%s-ecr-api-endpoint'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.securityGroupIdRef.name
+          transforms:
+            - string:
+                fmt: '%s-endpoint-sg'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-ecr-api-endpoint-sga'
+              type: string
+        - patchSetName: network-general
+          type: PatchSet
     ## VPCEndpoint - ec2messages?
     ## VPCEndpoint - elasticloadbalancing
     ## VPCEndpoint - stsEndpoint
