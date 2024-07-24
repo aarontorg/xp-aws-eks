@@ -253,7 +253,7 @@ spec:
         spec:
           forProvider:
             cidrBlocks:
-              - 192.168.0.0/16
+              - 172.31.0.0/16
             description: Allow inbound
             toPort: 443
             fromPort: 443
