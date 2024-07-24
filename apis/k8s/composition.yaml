@@ -276,9 +276,9 @@ spec:
               matchLabels:
                 role: nodegroup
             scalingConfig:
-              - desiredSize: 3
-                maxSize: 6
-                minSize: 3
+              - desiredSize: 1
+                maxSize: 3
+                minSize: 1
             subnetIdSelector:
               matchLabels:
                 access: private
