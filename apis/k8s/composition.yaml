@@ -108,6 +108,12 @@ spec:
                 type: TrimPrefix
               type: string
           type: ToCompositeFieldPath
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.vpcConfig[0].securityGroupIdRefs
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-endpoint-sg"
         - fromFieldPath: status.atProvider.vpcConfig[0].clusterSecurityGroupId
           policy:
             fromFieldPath: Optional
@@ -255,7 +261,7 @@ spec:
             - string:
                 fmt: '%s-ng-ec2contreg'
               type: string
-    - name: nodeGroupPublic
+    - name: nodeGroupPrivate
       base:
         apiVersion: eks.aws.upbound.io/v1beta1
         kind: NodeGroup
