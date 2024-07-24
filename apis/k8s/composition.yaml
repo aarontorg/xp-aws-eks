@@ -109,7 +109,7 @@ spec:
               type: string
           type: ToCompositeFieldPath
         - fromFieldPath: spec.id
-          toFieldPath: spec.forProvider.vpcConfig[0].securityGroupIdRefs
+          toFieldPath: spec.forProvider.vpcConfig[0].securityGroupIdRefs[0].name
           transforms:
             - string:
                 fmt: "%s-endpoint-sg"
