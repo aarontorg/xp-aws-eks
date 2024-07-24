@@ -1,13 +1,13 @@
 apiVersion: xp.sapns2.io/v1alpha1
 kind: XK8s
 metadata:
-  name: aws-garden-eks1
+  name: aws-garden-eks
 spec:
-  id: aws-garden-eks1
+  id: aws-garden-eks
   k8Version: "1.29"
   region: us-gov-west-1
   iam:
-    awsArn: arn:aws-us-gov:iam::892749690363:user/aws-gardener-admin #arn:aws:iam::058264154390:root
+    awsArn: arn:aws-us-gov:iam::029168290193:user/gardener-user #arn:aws:iam::058264154390:root
     #roleArn: arn:aws:iam::058264154390:role/k8sadmin
     #userArn: arn:aws:iam::058264154390:user/wiz-demo-k8sadmin
     #autoscalerArn: arn:aws:iam::058264154390:role/k8sadmin
