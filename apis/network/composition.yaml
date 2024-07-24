@@ -543,7 +543,7 @@ spec:
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
         kind: VPCEndpointSecurityGroupAssociation
-      name: ecrDkrEndpoint-sga
+      name: ecrApiEndpoint-sga
       patches:
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.vpcEndpointIdRef.name
