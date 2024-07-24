@@ -23,7 +23,7 @@ spec:
             #    value: value2
             values:
               expose:
-                type: loadBalancer
+                type: clusterIP
                 tls:
                   auto:
                     commonName: "ns2-test-harbor"
