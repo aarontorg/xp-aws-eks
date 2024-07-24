@@ -618,6 +618,34 @@ spec:
               type: string
         - patchSetName: network-general
           type: PatchSet
+    ## VPCEndpointSubnetAssociation - sts
+    - base:
+        apiVersion: ec2.aws.upbound.io/v1beta1
+        kind: VPCEndpointSubnetAssociation
+        spec:
+          forProvider:
+            subnetIdSelector:
+              matchControllerRef: true
+              matchLabels:
+                access: private
+      name: stsEndpoint-sna
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.subnetIdSelector.matchLabels[networks.xp.sapns2.io/network-id]
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.vpcEndpointIdRef.name
+          transforms:
+            - string:
+                fmt: '%s-sts-endpoint'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-sts-endpoint-sna'
+              type: string
+        - patchSetName: network-general
+          type: PatchSet
     ## VPCEndpoint - kms?
     ## VPCEndpoint - logsEndpoint
     - base:
