@@ -23,7 +23,7 @@ spec:
             #    value: value2
             values:
               expose:
-                type: clusterIP
+                type: nodePort #clusterIP
                 tls:
                   auto:
                     commonName: "ns2-test-harbor"
