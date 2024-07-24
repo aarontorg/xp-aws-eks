@@ -195,7 +195,7 @@ spec:
           toFieldPath: spec.forProvider.subnetIdSelector.matchLabels.zone
           transforms:
             - string:
-                fmt: '%sa'
+                fmt: '%sb'
               type: string
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.routeTableIdRef.name
