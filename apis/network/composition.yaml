@@ -52,7 +52,7 @@ spec:
         spec:
           forProvider:
             autoAccept: true
-            peerVpcIc: vpc-04e889748fbf58d4d
+            peerVpcId: vpc-04e889748fbf58d4d
             vpcIdSelector:
               matchControllerRef: true
       name: jumpPeeringConnection
