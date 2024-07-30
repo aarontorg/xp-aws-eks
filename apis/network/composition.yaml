@@ -41,10 +41,6 @@ spec:
               type: string
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.tags.Name
-          transforms:
-            - string:
-                fmt: '%s'
-              type: string
     ## PEERING Connection
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
@@ -67,10 +63,6 @@ spec:
               type: string
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.tags.Name
-          transforms:
-            - string:
-                fmt: '%s'
-              type: string
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.vpcIdSelector.matchLabels[vpc]
           transforms:
@@ -330,6 +322,8 @@ spec:
             - string:
                 fmt: '%s-sec-group'
               type: string
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.tags.Name
     ## Endpoint SecurityGroupRule
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
@@ -362,6 +356,12 @@ spec:
             - string:
                 fmt: '%s-sg-rule-endpoint-ingress'
               type: string
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.tags.Name
+          transforms:
+            - string:
+                fmt: '%s-sg-rule-endpoint-ingress'
+              type: string
     ## ENDPOINTS ##
     ## VPCEndpoint - s3
     - base:
@@ -387,6 +387,12 @@ spec:
               type: string
         - patchSetName: network-general
           type: PatchSet
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.tags.Name
+          transforms:
+            - string:
+                fmt: '%s-s3-endpoint'
+              type: string
     ## VPCEndpointRouteTableAssociation - s3
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
@@ -438,6 +444,12 @@ spec:
               type: string
         - patchSetName: network-general
           type: PatchSet
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.tags.Name
+          transforms:
+            - string:
+                fmt: '%s-ec2-endpoint'
+              type: string
     ## EndPointSubnetAccociation - ec2
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
@@ -517,6 +529,12 @@ spec:
               type: string
         - patchSetName: network-general
           type: PatchSet
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.tags.Name
+          transforms:
+            - string:
+                fmt: '%s-ecr-dkr-endpoint'
+              type: string
     ## VPCEndpointSubnetAssociation - ecrDkrEndpoint
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
@@ -549,7 +567,7 @@ spec:
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
         kind: VPCEndpointSecurityGroupAssociation
-      name: ecrDkrsec-groupa
+      name: ecrDkrsec-group
       patches:
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.vpcEndpointIdRef.name
@@ -567,7 +585,7 @@ spec:
           toFieldPath: metadata.name
           transforms:
             - string:
-                fmt: '%s-ecr-dkr-sec-groupa'
+                fmt: '%s-ecr-dkr-sec-group'
               type: string
         - patchSetName: network-general
           type: PatchSet
@@ -596,6 +614,12 @@ spec:
               type: string
         - patchSetName: network-general
           type: PatchSet
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.tags.Name
+          transforms:
+            - string:
+                fmt: '%s-ecr-api-endpoint'
+              type: string
     ## VPCEndpointSubnetAssociation - ecrApiEndpoint
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
@@ -628,7 +652,7 @@ spec:
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
         kind: VPCEndpointSecurityGroupAssociation
-      name: ecrApisec-groupa
+      name: ecrApisec-group
       patches:
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.vpcEndpointIdRef.name
@@ -646,7 +670,7 @@ spec:
           toFieldPath: metadata.name
           transforms:
             - string:
-                fmt: '%s-ecr-api-sec-groupa'
+                fmt: '%s-ecr-api-sec-group'
               type: string
         - patchSetName: network-general
           type: PatchSet
@@ -675,11 +699,17 @@ spec:
               type: string
         - patchSetName: network-general
           type: PatchSet
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.tags.Name
+          transforms:
+            - string:
+                fmt: '%s-sts-endpoint'
+              type: string
     ## VPCEndpointSecurityGroupAssociation - stsEndpoint
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
         kind: VPCEndpointSecurityGroupAssociation
-      name: stssec-groupa
+      name: stssec-group
       patches:
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.vpcEndpointIdRef.name
@@ -697,7 +727,7 @@ spec:
           toFieldPath: metadata.name
           transforms:
             - string:
-                fmt: '%s-sts-sec-groupa'
+                fmt: '%s-sts-sec-group'
               type: string
         - patchSetName: network-general
           type: PatchSet
@@ -754,6 +784,12 @@ spec:
               type: string
         - patchSetName: network-general
           type: PatchSet
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.tags.Name
+          transforms:
+            - string:
+                fmt: '%s-logs-endpoint'
+              type: string
     ## VPCEndpointSubnetAssociation - logsEndpoint
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
@@ -786,7 +822,7 @@ spec:
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
         kind: VPCEndpointSecurityGroupAssociation
-      name: logssec-groupa
+      name: logssec-group
       patches:
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.vpcEndpointIdRef.name
@@ -804,7 +840,7 @@ spec:
           toFieldPath: metadata.name
           transforms:
             - string:
-                fmt: '%s-logs-sec-groupa'
+                fmt: '%s-logs-sec-group'
               type: string
         - patchSetName: network-general
           type: PatchSet
