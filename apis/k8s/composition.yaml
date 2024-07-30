@@ -126,6 +126,8 @@ spec:
           toFieldPath: status.eks.clusterSecurityGroupId
           type: ToCompositeFieldPath
         - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+        - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.tags.Name
     ## ClusterAuth
     - name: kubernetesClusterAuth
@@ -307,6 +309,12 @@ spec:
             fromFieldPath: Optional
           toFieldPath: status.eks.clusterName
           type: ToCompositeFieldPath
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-nodegroup'
+              type: string
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.tags.Name
           transforms:
