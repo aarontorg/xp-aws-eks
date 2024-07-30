@@ -22,6 +22,38 @@ spec:
             #  - name: param1
             #    value: value2
             values:
+              nginx:
+                image:
+                  repository: 029168290193.dkr.ecr.us-gov-west-1.amazonaws.com/nginx-photon
+              portal:
+                image:
+                  repository: 029168290193.dkr.ecr.us-gov-west-1.amazonaws.com/harbor-portal
+              core:
+                image:
+                  repository: 029168290193.dkr.ecr.us-gov-west-1.amazonaws.com/harbor-core
+              jobservice:
+                image:
+                  repository: 029168290193.dkr.ecr.us-gov-west-1.amazonaws.com/harbor-jobservice
+              registry:
+                image:
+                  repository: 029168290193.dkr.ecr.us-gov-west-1.amazonaws.com/registry-photon
+                controller:
+                  image:
+                    repository: 029168290193.dkr.ecr.us-gov-west-1.amazonaws.com/harbor-registryctl
+              trivy:
+                image:
+                  repository: 029168290193.dkr.ecr.us-gov-west-1.amazonaws.com/trivy-adapter-photon
+              database:
+                internal:
+                  image:
+                    repository: 029168290193.dkr.ecr.us-gov-west-1.amazonaws.com/harbor-db
+              redis:
+                internal:
+                  image:
+                    repository: 029168290193.dkr.ecr.us-gov-west-1.amazonaws.com/redis-photon
+              exporter:
+                image:
+                  repository: 029168290193.dkr.ecr.us-gov-west-1.amazonaws.com/harbor-exporter
               expose:
                 type: clusterIP
                 tls:

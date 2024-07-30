@@ -1,6 +1,6 @@
 apiVersion: xp.sapns2.io/v1alpha1
 kind: XHarbors
 metadata:
-  name: aws-garden-eks
+  name: gardener-aws-il5
 spec:
-  id: aws-garden-eks
+  id: gardener-aws-il5
