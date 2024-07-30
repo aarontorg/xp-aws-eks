@@ -18,15 +18,16 @@ spec:
           fromFieldPath: spec.id
           toFieldPath: metadata.labels[networks.xp.sapns2.io/network-id]
   resources:
+    ## VPC ##
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
         kind: VPC
         spec:
           forProvider:
-            cidrBlock: 172.31.0.0/16
+            cidrBlock: 10.111.0.0/16 #patch
             enableDnsSupport: true
             enableDnsHostnames: true
-      name: eks-vcp
+      name: eks-vpc
       patches:
         - type: PatchSet
           patchSetName: network-general
@@ -38,6 +39,46 @@ spec:
             - string:
                 fmt: '%s-vpc'
               type: string
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.tags.Name
+          transforms:
+            - string:
+                fmt: '%s'
+              type: string
+    ## PEERING Connection
+    - base:
+        apiVersion: ec2.aws.upbound.io/v1beta1
+        kind: VPCPeeringConnection
+        spec:
+          forProvider:
+            autoAccept: true
+            peerVpcIc: vpc-04e889748fbf58d4d
+            vpcIdSelector:
+              matchControllerRef: true
+      name: jumpPeeringConnection
+      patches:
+        - type: PatchSet
+          patchSetName: network-general
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-peering'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.tags.Name
+          transforms:
+            - string:
+                fmt: '%s'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.vpcIdSelector.matchLabels[vpc]
+          transforms:
+            - string:
+                fmt: '%s-vpc'
+              type: string
+    ## SUBNETS ##
+    ## Private Subnets
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
         kind: Subnet
@@ -47,12 +88,12 @@ spec:
             access: private
         spec:
           forProvider:
-            cidrBlock: 172.31.0.0/18
+            cidrBlock: 10.111.1.0/24 #patch
             vpcIdSelector:
               matchControllerRef: true
             tags:
               kubernetes.io/role/internal-elb: "1"
-      name: subnet-private-west-2a
+      name: subnet-private-1a
       patches:
         - type: PatchSet
           patchSetName: network-general
@@ -90,12 +131,12 @@ spec:
         spec:
           forProvider:
             region: us-gov-west-1
-            cidrBlock: 172.31.64.0/18
+            cidrBlock: 10.111.2.0/24 #patch
             vpcIdSelector:
               matchControllerRef: true
             tags:
               kubernetes.io/role/internal-elb: "1"
-      name: subnet-private-west-2b
+      name: subnet-private-1b
       patches:
         - type: PatchSet
           patchSetName: network-general
@@ -123,7 +164,50 @@ spec:
             - string:
                 fmt: '%s-private-b'
               type: string
-## Routes
+    - base:
+        apiVersion: ec2.aws.upbound.io/v1beta1
+        kind: Subnet
+        metadata:
+          labels:
+            zone: us-gov-west-1b
+            access: private
+        spec:
+          forProvider:
+            region: us-gov-west-1
+            cidrBlock: 10.111.3.0/24 #patch
+            vpcIdSelector:
+              matchControllerRef: true
+            tags:
+              kubernetes.io/role/internal-elb: "1"
+      name: subnet-private-1c
+      patches:
+        - type: PatchSet
+          patchSetName: network-general
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-private-c'
+              type: string
+        - fromFieldPath: spec.region
+          toFieldPath: spec.forProvider.availabilityZone
+          transforms:
+            - string:
+                fmt: '%sc'
+              type: string
+        - fromFieldPath: spec.region
+          toFieldPath: metadata.labels.zone
+          transforms:
+            - string:
+                fmt: '%sc'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.tags.Name
+          transforms:
+            - string:
+                fmt: '%s-private-c'
+              type: string
+    ## ROUTETABLE
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
         kind: RouteTable
@@ -211,7 +295,7 @@ spec:
               type: string
         - patchSetName: network-general
           type: PatchSet
-    ## Endpoint Security Group
+    ## SECURITY GROUP ##
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
         kind: SecurityGroup
@@ -232,19 +316,19 @@ spec:
           toFieldPath: metadata.name
           transforms:
             - string:
-                fmt: '%s-endpoint-sg'
+                fmt: '%s-sec-group'
               type: string
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.name
           transforms:
             - string:
-                fmt: '%s-endpoint-sg'
+                fmt: '%s-sec-group'
               type: string
         - fromFieldPath: spec.id
           toFieldPath: metadata.labels[securitygroup]
           transforms:
             - string:
-                fmt: '%s-endpoint-sg'
+                fmt: '%s-sec-group'
               type: string
     ## Endpoint SecurityGroupRule
     - base:
@@ -253,7 +337,7 @@ spec:
         spec:
           forProvider:
             cidrBlocks:
-              - 172.31.0.0/16
+              - 10.111.0.0/16
               - 192.168.0.0/16 # CIDR block where jump host is ... also need to setup peering connection
             description: Allow inbound
             toPort: 443
@@ -270,7 +354,7 @@ spec:
           toFieldPath: spec.forProvider.securityGroupIdSelector.matchLabels[securitygroup]
           transforms:
             - string:
-                fmt: '%s-endpoint-sg'
+                fmt: '%s-sec-group'
               type: string
         - fromFieldPath: spec.id
           toFieldPath: metadata.name
@@ -278,6 +362,7 @@ spec:
             - string:
                 fmt: '%s-sg-rule-endpoint-ingress'
               type: string
+    ## ENDPOINTS ##
     ## VPCEndpoint - s3
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
@@ -328,7 +413,6 @@ spec:
               type: string
         - patchSetName: network-general
           type: PatchSet
-    ## VPCEndpoint - Autoscalling?
     ## VPCEndPoint - EC2
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
@@ -386,7 +470,7 @@ spec:
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
         kind: VPCEndpointSecurityGroupAssociation
-      name: ec2Endpoint-sga
+      name: ec2sec-group
       patches:
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.vpcEndpointIdRef.name
@@ -398,13 +482,13 @@ spec:
           toFieldPath: spec.forProvider.securityGroupIdRef.name
           transforms:
             - string:
-                fmt: '%s-endpoint-sg'
+                fmt: '%s-sec-group'
               type: string
         - fromFieldPath: spec.id
           toFieldPath: metadata.name
           transforms:
             - string:
-                fmt: '%s-ec2-endpoint-sgaa'
+                fmt: '%s-ec2-sec-group'
               type: string
         - patchSetName: network-general
           type: PatchSet
@@ -465,7 +549,7 @@ spec:
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
         kind: VPCEndpointSecurityGroupAssociation
-      name: ecrDkrEndpoint-sga
+      name: ecrDkrsec-groupa
       patches:
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.vpcEndpointIdRef.name
@@ -477,13 +561,13 @@ spec:
           toFieldPath: spec.forProvider.securityGroupIdRef.name
           transforms:
             - string:
-                fmt: '%s-endpoint-sg'
+                fmt: '%s-sec-group'
               type: string
         - fromFieldPath: spec.id
           toFieldPath: metadata.name
           transforms:
             - string:
-                fmt: '%s-ecr-dkr-endpoint-sga'
+                fmt: '%s-ecr-dkr-sec-groupa'
               type: string
         - patchSetName: network-general
           type: PatchSet
@@ -544,7 +628,7 @@ spec:
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
         kind: VPCEndpointSecurityGroupAssociation
-      name: ecrApiEndpoint-sga
+      name: ecrApisec-groupa
       patches:
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.vpcEndpointIdRef.name
@@ -556,18 +640,16 @@ spec:
           toFieldPath: spec.forProvider.securityGroupIdRef.name
           transforms:
             - string:
-                fmt: '%s-endpoint-sg'
+                fmt: '%s-sec-group'
               type: string
         - fromFieldPath: spec.id
           toFieldPath: metadata.name
           transforms:
             - string:
-                fmt: '%s-ecr-api-endpoint-sga'
+                fmt: '%s-ecr-api-sec-groupa'
               type: string
         - patchSetName: network-general
           type: PatchSet
-    ## VPCEndpoint - ec2messages?
-    ## VPCEndpoint - elasticloadbalancing
     ## VPCEndpoint - stsEndpoint
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
@@ -597,7 +679,7 @@ spec:
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
         kind: VPCEndpointSecurityGroupAssociation
-      name: stsEndpoint-sga
+      name: stssec-groupa
       patches:
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.vpcEndpointIdRef.name
@@ -609,13 +691,13 @@ spec:
           toFieldPath: spec.forProvider.securityGroupIdRef.name
           transforms:
             - string:
-                fmt: '%s-endpoint-sg'
+                fmt: '%s-sec-group'
               type: string
         - fromFieldPath: spec.id
           toFieldPath: metadata.name
           transforms:
             - string:
-                fmt: '%s-sts-endpoint-sga'
+                fmt: '%s-sts-sec-groupa'
               type: string
         - patchSetName: network-general
           type: PatchSet
@@ -647,7 +729,6 @@ spec:
               type: string
         - patchSetName: network-general
           type: PatchSet
-    ## VPCEndpoint - kms?
     ## VPCEndpoint - logsEndpoint
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
@@ -705,7 +786,7 @@ spec:
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
         kind: VPCEndpointSecurityGroupAssociation
-      name: logsEndpoint-sga
+      name: logssec-groupa
       patches:
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.vpcEndpointIdRef.name
@@ -717,16 +798,259 @@ spec:
           toFieldPath: spec.forProvider.securityGroupIdRef.name
           transforms:
             - string:
-                fmt: '%s-endpoint-sg'
+                fmt: '%s-sec-group'
               type: string
         - fromFieldPath: spec.id
           toFieldPath: metadata.name
           transforms:
             - string:
-                fmt: '%s-logs-endpoint-sga'
+                fmt: '%s-logs-sec-groupa'
               type: string
         - patchSetName: network-general
           type: PatchSet
     ## VPCEndpoint - ssm
     ## VPCEndpoint - ssmessages
-    # Old lines before patches 666
+    ## VPCEndpoint - kms
+    ## VPCEndpoint - ec2messages?
+    ## VPCEndpoint - elasticloadbalancing
+    ## VPCEndpoint - Autoscalling?
+
+
+#    ## GATEWAYS & ROUTING ##
+#    ## Internet Gateway
+#    - base:
+#        apiVersion: ec2.aws.upbound.io/v1beta1
+#        kind: InternetGateway
+#        spec:
+#          forProvider:
+#            region: us-gov-west-1
+#      name: internetGateway
+#      patches:
+#        - fromFieldPath: spec.id
+#          toFieldPath: metadata.name
+#          transforms:
+#            - string:
+#                fmt: '%s-ig'
+#              type: string
+#        - fromFieldPath: spec.id
+#          toFieldPath: spec.forProvider.vpcIdSelector.matchLabels[networks.xp.sapns2.io/network-id]
+#        - type: PatchSet
+#          patchSetName: network-general
+#        - fromFieldPath: spec.id
+#          toFieldPath: spec.forProvider.tags.Name
+#    ## Elastic IP
+#    ## NAT Gateways
+#    - base:
+#        apiVersion: ec2.aws.upbound.io/v1beta1
+#        kind: NATGateway
+#        spec:
+#          forProvider:
+#            connectivityType: public
+#      name: natGateway-public-zone-a
+#      patches:
+#        - type: PatchSet
+#          patchSetName: network-general
+#        - fromFieldPath: spec.id
+#          toFieldPath: metadata.name
+#          transforms:
+#            - string:
+#                fmt: '%s-nat-gateway-a'
+#              type: string
+#        - fromFieldPath: spec.id
+#          toFieldPath: spec.forProvider.subnetIdRef.name
+#          transforms:
+#            - string:
+#                fmt: '%s-public-a'
+#              type: string
+#        - fromFieldPath: spec.region
+#          toFieldPath: spec.forProvider.region
+#        - fromFieldPath: spec.id
+#          toFieldPath: spec.forProvider.tags.Name
+#    - base:
+#        apiVersion: ec2.aws.upbound.io/v1beta1
+#        kind: NATGateway
+#        spec:
+#          forProvider:
+#            connectivityType: public
+#      name: natGateway-public-zone-b
+#      patches:
+#        - type: PatchSet
+#          patchSetName: network-general
+#        - fromFieldPath: spec.id
+#          toFieldPath: metadata.name
+#          transforms:
+#            - string:
+#                fmt: '%s-nat-gateway-b'
+#              type: string
+#        - fromFieldPath: spec.id
+#          toFieldPath: spec.forProvider.subnetIdRef.name
+#          transforms:
+#            - string:
+#                fmt: '%s-public-b'
+#              type: string
+#        - fromFieldPath: spec.region
+#          toFieldPath: spec.forProvider.region
+#        - fromFieldPath: spec.id
+#          toFieldPath: spec.forProvider.tags.Name
+#    - base:
+#        apiVersion: ec2.aws.upbound.io/v1beta1
+#        kind: NATGateway
+#        spec:
+#          forProvider:
+#            connectivityType: public
+#      name: natGateway-public-zone-c
+#      patches:
+#        - type: PatchSet
+#          patchSetName: network-general
+#        - fromFieldPath: spec.id
+#          toFieldPath: metadata.name
+#          transforms:
+#            - string:
+#                fmt: '%s-nat-gateway-c'
+#              type: string
+#        - fromFieldPath: spec.id
+#          toFieldPath: spec.forProvider.subnetIdRef.name
+#          transforms:
+#            - string:
+#                fmt: '%s-public-c'
+#              type: string
+#        - fromFieldPath: spec.region
+#          toFieldPath: spec.forProvider.region
+#        - fromFieldPath: spec.id
+#          toFieldPath: spec.forProvider.tags.Name
+
+#    ## Public Subnerts
+#    - base:
+#        apiVersion: ec2.aws.upbound.io/v1beta1
+#        kind: Subnet
+#        metadata:
+#          labels:
+#            zone: us-gov-west-1a
+#            access: public
+#        spec:
+#          forProvider:
+#            region: us-gov-west-1
+#            mapPublicIpOnLaunch: true
+#            cidrBlock: 10.111.4.0/24
+#            vpcIdSelector:
+#              matchControllerRef: true
+#            availabilityZone: us-gov-west-1a
+#            #tags:
+#            #  kubernetes.io/role/elb: "1"
+#      name: subnet-public-1a
+#      patches:
+#        - type: PatchSet
+#          patchSetName: network-id
+#        - fromFieldPath: spec.id
+#          toFieldPath: metadata.name
+#          transforms:
+#            - string:
+#                fmt: '%s-public-a'
+#              type: string
+#        - fromFieldPath: spec.region
+#          toFieldPath: spec.forProvider.availabilityZone
+#          transforms:
+#            - string:
+#                fmt: '%sa'
+#              type: string
+#        - fromFieldPath: spec.region
+#          toFieldPath: metadata.labels.zone
+#          transforms:
+#            - string:
+#                fmt: '%sa'
+#              type: string
+#        - fromFieldPath: spec.id
+#          toFieldPath: spec.forProvider.tags.Name
+#          transforms:
+#            - string:
+#                fmt: '%s-public-a'
+#              type: string
+#    - base:
+#        apiVersion: ec2.aws.upbound.io/v1beta1
+#        kind: Subnet
+#        metadata:
+#          labels:
+#            zone: us-gov-west-1a
+#            access: public
+#        spec:
+#          forProvider:
+#            region: us-gov-west-1
+#            mapPublicIpOnLaunch: true
+#            cidrBlock: 10.111.5.0/24
+#            vpcIdSelector:
+#              matchControllerRef: true
+#            availabilityZone: us-gov-west-1b
+#            #tags:
+#            #  kubernetes.io/role/elb: "1"
+#      name: subnet-public-1b
+#      patches:
+#        - type: PatchSet
+#          patchSetName: network-id
+#        - fromFieldPath: spec.id
+#          toFieldPath: metadata.name
+#          transforms:
+#            - string:
+#                fmt: '%s-public-b'
+#              type: string
+#        - fromFieldPath: spec.region
+#          toFieldPath: spec.forProvider.availabilityZone
+#          transforms:
+#            - string:
+#                fmt: '%sb'
+#              type: string
+#        - fromFieldPath: spec.region
+#          toFieldPath: metadata.labels.zone
+#          transforms:
+#            - string:
+#                fmt: '%sb'
+#              type: string
+#        - fromFieldPath: spec.id
+#          toFieldPath: spec.forProvider.tags.Name
+#          transforms:
+#            - string:
+#                fmt: '%s-public-b'
+#              type: string
+#    - base:
+#        apiVersion: ec2.aws.upbound.io/v1beta1
+#        kind: Subnet
+#        metadata:
+#          labels:
+#            zone: us-gov-west-1a
+#            access: public
+#        spec:
+#          forProvider:
+#            region: us-gov-west-1
+#            mapPublicIpOnLaunch: true
+#            cidrBlock: 10.111.6.0/24
+#            vpcIdSelector:
+#              matchControllerRef: true
+#            #tags:
+#            #  kubernetes.io/role/elb: "1"
+#      name: subnet-public-1c
+#      patches:
+#        - type: PatchSet
+#          patchSetName: network-id
+#        - fromFieldPath: spec.id
+#          toFieldPath: metadata.name
+#          transforms:
+#            - string:
+#                fmt: '%s-public-c'
+#              type: string
+#        - fromFieldPath: spec.region
+#          toFieldPath: spec.forProvider.availabilityZone
+#          transforms:
+#            - string:
+#                fmt: '%sc'
+#              type: string
+#        - fromFieldPath: spec.region
+#          toFieldPath: metadata.labels.zone
+#          transforms:
+#            - string:
+#                fmt: '%sc'
+#              type: string
+#        - fromFieldPath: spec.id
+#          toFieldPath: spec.forProvider.tags.Name
+#          transforms:
+#            - string:
+#                fmt: '%s-public-c'
+#              type: string
