@@ -1,9 +1,9 @@
 apiVersion: xp.sapns2.io/v1alpha1
 kind: XK8s
 metadata:
-  name: aws-garden-eks
+  name: gardener-aws-il5
 spec:
-  id: aws-garden-eks
+  id: gardener-aws-il5
   k8Version: "1.29"
   region: us-gov-west-1
   iam:

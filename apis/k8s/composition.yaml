@@ -50,6 +50,12 @@ spec:
             - string:
                 fmt: '%s-controlplane'
               type: string
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.tags.Name
+          transforms:
+            - string:
+                fmt: '%s-controlplane'
+              type: string
     - name: EKSClusterRolePolicyAttachment
       base:
         apiVersion: iam.aws.upbound.io/v1beta1
@@ -112,13 +118,15 @@ spec:
           toFieldPath: spec.forProvider.vpcConfig[0].securityGroupIdRefs[0].name
           transforms:
             - string:
-                fmt: "%s-endpoint-sg"
+                fmt: "%s-sec-group"
               type: string
         - fromFieldPath: status.atProvider.vpcConfig[0].clusterSecurityGroupId
           policy:
             fromFieldPath: Optional
           toFieldPath: status.eks.clusterSecurityGroupId
           type: ToCompositeFieldPath
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.tags.Name
     ## ClusterAuth
     - name: kubernetesClusterAuth
       base:
@@ -183,6 +191,12 @@ spec:
           type: ToCompositeFieldPath
         - fromFieldPath: spec.id
           toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-nodegroup'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.tags.Name
           transforms:
             - string:
                 fmt: '%s-nodegroup'
@@ -270,15 +284,15 @@ spec:
             clusterNameSelector:
               matchControllerRef: true
             instanceTypes:
-              - t3.medium
+              - m5.xlarge
             nodeRoleArnSelector:
               matchControllerRef: true
               matchLabels:
                 role: nodegroup
             scalingConfig:
-              - desiredSize: 1
-                maxSize: 3
-                minSize: 1
+              - desiredSize: 3
+                maxSize: 10
+                minSize: 3
             subnetIdSelector:
               matchLabels:
                 access: private
@@ -293,6 +307,12 @@ spec:
             fromFieldPath: Optional
           toFieldPath: status.eks.clusterName
           type: ToCompositeFieldPath
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.tags.Name
+          transforms:
+            - string:
+                fmt: '%s-nodegroup'
+              type: string
     - name: ebsCsiAddon
       base:
         apiVersion: eks.aws.upbound.io/v1beta1
