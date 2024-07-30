@@ -417,12 +417,6 @@ spec:
             - string:
                 fmt: '%s-sg-rule-endpoint-ingress'
               type: string
-        - fromFieldPath: spec.id
-          toFieldPath: spec.forProvider.tags.Name
-          transforms:
-            - string:
-                fmt: '%s-sg-rule-endpoint-ingress'
-              type: string
     ## ENDPOINTS ##
     ## VPCEndpoint - s3
     - base:
