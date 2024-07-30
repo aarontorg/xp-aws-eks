@@ -320,6 +320,34 @@ spec:
               type: string
         - patchSetName: network-general
           type: PatchSet
+    - base:
+        apiVersion: ec2.aws.upbound.io/v1beta2
+        kind: Route
+        spec:
+          forProvider:
+            destinationCidrBlock: 192.168.0.0/16
+      name: routePeeringConnection
+      patches:
+        - patchSetName: network-general
+          type: PatchSet
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-peer-route'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.routeTableIdRef.name
+          transforms:
+            - string:
+                fmt: '%s-routetable'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.vpcPeeringConnectionIdRef.name
+          transforms:
+            - string:
+                fmt: '%s-peering'
+              type: string
     ## SECURITY GROUP ##
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
