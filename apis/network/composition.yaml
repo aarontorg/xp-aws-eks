@@ -287,6 +287,39 @@ spec:
               type: string
         - patchSetName: network-general
           type: PatchSet
+    - base:
+        apiVersion: ec2.aws.upbound.io/v1beta1
+        kind: RouteTableAssociation
+        spec:
+          forProvider:
+            routeTableIdSelector:
+              matchControllerRef: true
+            subnetIdSelector:
+              matchControllerRef: true
+              matchLabels:
+                access: private
+      name: routetableAssociation-private-c
+      patches:
+        - fromFieldPath: spec.region
+          toFieldPath: spec.forProvider.subnetIdSelector.matchLabels.zone
+          transforms:
+            - string:
+                fmt: '%sc'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.routeTableIdRef.name
+          transforms:
+            - string:
+                fmt: '%s-routetable'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-rta-private-c'
+              type: string
+        - patchSetName: network-general
+          type: PatchSet
     ## SECURITY GROUP ##
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
