@@ -25,40 +25,51 @@ spec:
               nginx:
                 image:
                   repository: 029168290193.dkr.ecr.us-gov-west-1.amazonaws.com/nginx-photon
+                  tag: dev
               portal:
                 image:
                   repository: 029168290193.dkr.ecr.us-gov-west-1.amazonaws.com/harbor-portal
+                  tag: dev
               core:
                 image:
                   repository: 029168290193.dkr.ecr.us-gov-west-1.amazonaws.com/harbor-core
+                  tag: dev
               jobservice:
                 image:
                   repository: 029168290193.dkr.ecr.us-gov-west-1.amazonaws.com/harbor-jobservice
+                  tag: dev
               registry:
                 image:
                   repository: 029168290193.dkr.ecr.us-gov-west-1.amazonaws.com/registry-photon
+                  tag: dev
                 controller:
                   image:
                     repository: 029168290193.dkr.ecr.us-gov-west-1.amazonaws.com/harbor-registryctl
+                    tag: dev
               trivy:
                 image:
                   repository: 029168290193.dkr.ecr.us-gov-west-1.amazonaws.com/trivy-adapter-photon
+                  tag: dev
               database:
                 internal:
                   image:
                     repository: 029168290193.dkr.ecr.us-gov-west-1.amazonaws.com/harbor-db
+                    tag: dev
               redis:
                 internal:
                   image:
                     repository: 029168290193.dkr.ecr.us-gov-west-1.amazonaws.com/redis-photon
+                    tag: dev
               exporter:
                 image:
                   repository: 029168290193.dkr.ecr.us-gov-west-1.amazonaws.com/harbor-exporter
+                  tag: dev
               expose:
                 type: clusterIP
                 tls:
                   auto:
                     commonName: "ns2-test-harbor"
+                    tag: dev
           providerConfigRef:
             name: helm-provider
       patches:
