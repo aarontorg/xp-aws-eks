@@ -39,9 +39,10 @@ spec:
                   repository: 029168290193.dkr.ecr.us-gov-west-1.amazonaws.com/harbor-jobservice
                   tag: dev
               registry:
-                image:
-                  repository: 029168290193.dkr.ecr.us-gov-west-1.amazonaws.com/registry-photon
-                  tag: dev
+                registry:
+                  image:
+                    repository: 029168290193.dkr.ecr.us-gov-west-1.amazonaws.com/registry-photon
+                    tag: dev
                 controller:
                   image:
                     repository: 029168290193.dkr.ecr.us-gov-west-1.amazonaws.com/harbor-registryctl
