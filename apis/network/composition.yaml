@@ -188,7 +188,7 @@ spec:
         kind: Subnet
         metadata:
           labels:
-            zone: us-gov-west-1b
+            zone: us-gov-west-1c
             access: private
         spec:
           forProvider:
@@ -317,7 +317,7 @@ spec:
         kind: Subnet
         metadata:
           labels:
-            zone: us-gov-west-1b
+            zone: us-gov-west-1c
             access: intra
         spec:
           forProvider:
@@ -577,7 +577,7 @@ spec:
             subnetIdSelector:
               matchControllerRef: true
               matchLabels:
-                access: private
+                access: intra
       name: routetableAssociation-intra-b
       patches:
         - fromFieldPath: spec.region
@@ -610,7 +610,7 @@ spec:
             subnetIdSelector:
               matchControllerRef: true
               matchLabels:
-                access: private
+                access: intra
       name: routetableAssociation-intra-c
       patches:
         - fromFieldPath: spec.region
