@@ -340,13 +340,139 @@ spec:
         spec:
           forProvider:
             addonName: vpc-cni
+            addonVersion: v1.18.3-eksbuild.1
+            resolveConflictsOnCreate: OVERWRITE
+            resolveConflictsOnUpdate: OVERWRITE
             clusterNameSelector:
               matchControllerRef: true
             preserve: false
-            configurationValues: '{"env": {"AWS_VPC_K8S_CNI_CUSTOM_NETWORK_CFG":"false"}}'  # see https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md for different options
+            configurationValues: '{"env":{"AWS_VPC_K8S_CNI_CUSTOM_NETWORK_CFG":"true","ENI_CONFIG_LABEL_DEF":"topology.kubernetes.io/zone","ENI_POD_ENI":"true"},"init":{"name":"aws-vpc-cni-init","env":{"DISABLE_TCP_EARLY_DEMUX":"true"}}}'  # see https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md for different options
       patches:
         - type: PatchSet
           patchSetName: general
+    ## Gardener ENI -- MAYBE MAKE ITS OWN API
+    - name: intra-eni-a
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha2
+        kind: Object
+        spec:
+          deletionPolicy: Delete
+          forProvider:
+            manifest:
+              apiVersion: crd.k8s.amazonaws.com/v1alpha1
+              kind: ENIConfig
+              spec:
+                subnet: 100.64.1.0/24
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.manifest.spec.securityGroups[0]
+          transforms:
+            - string:
+                fmt: '%s-sec-group'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: spec.providerConfigRef.name
+        - fromFieldPath: spec.region
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-a'
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.manifest.metadata.name
+          transforms:
+            - string:
+                fmt: '%s-eni-intra-a'
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+    - name: intra-eni-b
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha2
+        kind: Object
+        spec:
+          deletionPolicy: Delete
+          forProvider:
+            manifest:
+              apiVersion: crd.k8s.amazonaws.com/v1alpha1
+              kind: ENIConfig
+              spec:
+                subnet: 100.64.2.0/24
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.manifest.spec.securityGroups[0]
+          transforms:
+            - string:
+                fmt: '%s-sec-group'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: spec.providerConfigRef.name
+        - fromFieldPath: spec.region
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-b'
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.manifest.metadata.name
+          transforms:
+            - string:
+                fmt: '%s-eni-intra-b'
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+    - name: intra-eni-c
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha2
+        kind: Object
+        spec:
+          deletionPolicy: Delete
+          forProvider:
+            manifest:
+              apiVersion: crd.k8s.amazonaws.com/v1alpha1
+              kind: ENIConfig
+              spec:
+                subnet: 100.64.3.0/24
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.manifest.spec.securityGroups[0]
+          transforms:
+            - string:
+                fmt: '%s-sec-group'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: spec.providerConfigRef.name
+        - fromFieldPath: spec.region
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-c'
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.manifest.metadata.name
+          transforms:
+            - string:
+                fmt: '%s-eni-intra-c'
+                type: Format
+              type: string
+          type: FromCompositeFieldPath
+    # Try to Modify the AWS_NODE daemonset
+    - name: aws-node-daemonset
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha2
+        kind: Object
+        spec:
+          deletionPolicy: Delete
+          forProvider:
+            manifest:
+
+    # Misc Stuff
     - name: oidcProvider
       base:
         apiVersion: iam.aws.upbound.io/v1beta1
