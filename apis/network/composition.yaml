@@ -508,6 +508,34 @@ spec:
             - string:
                 fmt: '%s-peering'
               type: string
+    - base:
+        apiVersion: ec2.aws.upbound.io/v1beta2
+        kind: Route
+        spec:
+          forProvider:
+            destinationCidrBlock: 192.168.0.0/16
+      name: routePeeringConnection-private
+      patches:
+        - patchSetName: network-general
+          type: PatchSet
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - string:
+                fmt: '%s-peer-route-intra'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.routeTableIdRef.name
+          transforms:
+            - string:
+                fmt: '%s-routetable-intra'
+              type: string
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.vpcPeeringConnectionIdRef.name
+          transforms:
+            - string:
+                fmt: '%s-peering'
+              type: string
     ## ROUTETABLE - Intra
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
