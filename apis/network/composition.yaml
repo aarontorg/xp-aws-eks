@@ -107,7 +107,7 @@ spec:
             access: private
         spec:
           forProvider:
-            cidrBlock: 10.111.1.0/24 #patch
+            cidrBlock: 10.121.1.0/24 #patch
             vpcIdSelector:
               matchControllerRef: true
             tags:
@@ -150,7 +150,7 @@ spec:
         spec:
           forProvider:
             region: us-gov-west-1
-            cidrBlock: 10.111.2.0/24 #patch
+            cidrBlock: 10.121.2.0/24 #patch
             vpcIdSelector:
               matchControllerRef: true
             tags:
@@ -193,7 +193,7 @@ spec:
         spec:
           forProvider:
             region: us-gov-west-1
-            cidrBlock: 10.111.3.0/24 #patch
+            cidrBlock: 10.121.3.0/24 #patch
             vpcIdSelector:
               matchControllerRef: true
             tags:
