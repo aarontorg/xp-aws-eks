@@ -363,7 +363,7 @@ spec:
           forProvider:
             vpcIdSelector:
               matchControllerRef: true
-      name: routeTable
+      name: routeTable-private
       patches:
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.vpcIdSelector.matchLabels[networks.xp.sapns2.io/network-id]
@@ -486,7 +486,7 @@ spec:
         spec:
           forProvider:
             destinationCidrBlock: 192.168.0.0/16
-      name: routePeeringConnection
+      name: routePeeringConnection-private
       patches:
         - patchSetName: network-general
           type: PatchSet
@@ -516,7 +516,7 @@ spec:
           forProvider:
             vpcIdSelector:
               matchControllerRef: true
-      name: routeTable
+      name: routeTable-Intra
       patches:
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.vpcIdSelector.matchLabels[networks.xp.sapns2.io/network-id]
@@ -639,7 +639,7 @@ spec:
         spec:
           forProvider:
             destinationCidrBlock: 192.168.0.0/16
-      name: routePeeringConnection
+      name: routePeeringConnection-intra
       patches:
         - patchSetName: network-general
           type: PatchSet
