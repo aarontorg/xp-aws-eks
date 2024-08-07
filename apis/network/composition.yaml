@@ -661,34 +661,6 @@ spec:
               type: string
         - patchSetName: network-general
           type: PatchSet
-    - base:
-        apiVersion: ec2.aws.upbound.io/v1beta2
-        kind: Route
-        spec:
-          forProvider:
-            destinationCidrBlock: 192.168.0.0/16
-      name: routePeeringConnection-intra
-      patches:
-        - patchSetName: network-general
-          type: PatchSet
-        - fromFieldPath: spec.id
-          toFieldPath: metadata.name
-          transforms:
-            - string:
-                fmt: '%s-peer-route'
-              type: string
-        - fromFieldPath: spec.id
-          toFieldPath: spec.forProvider.routeTableIdRef.name
-          transforms:
-            - string:
-                fmt: '%s-routetable-intra'
-              type: string
-        - fromFieldPath: spec.id
-          toFieldPath: spec.forProvider.vpcPeeringConnectionIdRef.name
-          transforms:
-            - string:
-                fmt: '%s-peering'
-              type: string
     ## SECURITY GROUP ##
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
@@ -734,7 +706,7 @@ spec:
           forProvider:
             cidrBlocks:
               - 10.121.0.0/16
-              - 10.64.0.0/16
+              - 100.64.0.0/16
               - 192.168.0.0/16 # CIDR block where jump host is ... also need to setup peering connection
             description: Allow inbound
             toPort: 443
