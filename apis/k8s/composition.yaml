@@ -346,7 +346,7 @@ spec:
             clusterNameSelector:
               matchControllerRef: true
             preserve: false
-            configurationValues: '{"env":{"AWS_VPC_K8S_CNI_CUSTOM_NETWORK_CFG":"true","ENI_CONFIG_LABEL_DEF":"topology.kubernetes.io/zone","ENI_POD_ENI":"true"},"init":{"name":"aws-vpc-cni-init","env":{"DISABLE_TCP_EARLY_DEMUX":"true"}}}'  # see https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md for different options
+            configurationValues: '{"env":{"AWS_VPC_K8S_CNI_CUSTOM_NETWORK_CFG":"true","ENI_CONFIG_LABEL_DEF":"topology.kubernetes.io/zone","ENI_POD_ENI":"true"},"init":{"env":{"DISABLE_TCP_EARLY_DEMUX":"true"}}}'  # see https://github.com/aws/amazon-vpc-cni-k8s/blob/master/README.md for different options
       patches:
         - type: PatchSet
           patchSetName: general
