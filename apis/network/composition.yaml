@@ -514,7 +514,7 @@ spec:
         spec:
           forProvider:
             destinationCidrBlock: 192.168.0.0/16
-      name: routePeeringConnection-private
+      name: routePeeringConnection-intra
       patches:
         - patchSetName: network-general
           type: PatchSet
