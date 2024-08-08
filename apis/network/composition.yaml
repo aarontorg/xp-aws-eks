@@ -105,6 +105,7 @@ spec:
           labels:
             zone: us-gov-west-1a
             access: private
+            vpc-misc: endpoints
         spec:
           forProvider:
             cidrBlock: 10.121.1.0/24 #patch
@@ -826,6 +827,8 @@ spec:
             subnetConfiguration:
               subnetIdSelector:
                 matchControllerRef: true
+                matchLabels:
+                  vpc-misc: endpoints
       name: ec2Endpoint
       patches:
         - fromFieldPath: spec.id
