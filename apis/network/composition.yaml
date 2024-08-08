@@ -18,7 +18,7 @@ spec:
           fromFieldPath: spec.id
           toFieldPath: metadata.labels[networks.xp.sapns2.io/network-id]
   resources:
-    ## VPC ##
+    ## VPC ## 0
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
         kind: VPC
@@ -41,7 +41,7 @@ spec:
               type: string
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.tags.Name
-    ## VPCIPv4CidrBlockAssociation
+    ## VPCIPv4CidrBlockAssociation 1
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
         kind: VPCIPv4CidrBlockAssociation
@@ -68,7 +68,7 @@ spec:
             - string:
                 fmt: '%s-vpc'
               type: string
-    ## PEERING Connection
+    ## PEERING Connection 2
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
         kind: VPCPeeringConnection
@@ -97,7 +97,7 @@ spec:
                 fmt: '%s-vpc'
               type: string
     ## SUBNETS ##
-    ## Private Subnets
+    ## Private Subnets 3
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
         kind: Subnet
@@ -142,7 +142,7 @@ spec:
                 fmt: '%s-private-a'
               type: string
         - fromFieldPath: status.atProvider.id
-          toFieldPath: status.endpointSubnets
+          toFieldPath: status.endpointSubnets[]
           policy:
             mergeOptions:
               appendSlice: true
