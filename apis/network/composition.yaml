@@ -826,7 +826,7 @@ spec:
             vpcEndpointType: Interface
             subnetConfiguration:
               - subnetIdSelector:
-                matchControllerRef: true
+                  matchControllerRef: true
       name: ec2Endpoint
       patches:
         - fromFieldPath: spec.id
