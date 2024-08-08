@@ -27,3 +27,12 @@ spec:
               required:
                 - id
                 - region
+            status:
+              description: List of status items
+              properties:
+                endpointSubnets:
+                  type: array
+                  description: subnets to use for endpoints
+                  items:
+                    type: string
+              type: object

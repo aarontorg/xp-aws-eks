@@ -141,6 +141,12 @@ spec:
             - string:
                 fmt: '%s-private-a'
               type: string
+        - fromFieldPath: status.atProvider.id
+          toFieldPath: status.endpointSubnets
+          policy:
+            mergeOptions:
+              appendSlice: true
+          type: ToCompositeFieldPath
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
         kind: Subnet
@@ -184,6 +190,12 @@ spec:
             - string:
                 fmt: '%s-private-b'
               type: string
+        - fromFieldPath: status.atProvider.id
+          toFieldPath: status.endpointSubnets
+          policy:
+            mergeOptions:
+              appendSlice: true
+          type: ToCompositeFieldPath
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
         kind: Subnet
@@ -227,6 +239,12 @@ spec:
             - string:
                 fmt: '%s-private-c'
               type: string
+        - fromFieldPath: status.atProvider.id
+          toFieldPath: status.endpointSubnets
+          policy:
+            mergeOptions:
+              appendSlice: true
+          type: ToCompositeFieldPath
     ## IntraSubnets
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
@@ -824,13 +842,19 @@ spec:
             privateDnsEnabled: true
             serviceName: com.amazonaws.us-gov-west-1.ec2
             vpcEndpointType: Interface
-            subnetConfiguration:
-              - subnetIdSelector:
-                  matchControllerRef: true
-                  matchLabels:
-                    access: private
+            #subnetConfiguration:
+            #  - subnetIdSelector:
+            #      matchControllerRef: true
+            #      matchLabels:
+            #        access: private
       name: ec2Endpoint
       patches:
+        - fromFieldPath: status.endpointSubnets
+          toFieldPath: spec.forProvider.subnetIds
+          policy:
+            mergeOptions:
+              appendSlice: true
+            fromFieldPath: Required
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.vpcIdSelector.matchLabels[vpc]
           transforms:
