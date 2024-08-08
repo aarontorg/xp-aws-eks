@@ -940,8 +940,8 @@ spec:
               matchControllerRef: true
               matchLabels:
                 access: private
-                zone: us-gov-west-1b
-      name: ec2Endpoint-sna-a
+                zone: us-gov-west-1c
+      name: ec2Endpoint-sna-c
       patches:
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.subnetIdSelector.matchLabels[networks.xp.sapns2.io/network-id]
@@ -955,7 +955,7 @@ spec:
           toFieldPath: metadata.name
           transforms:
             - string:
-                fmt: '%s-ec2-endpoint-rta-b'
+                fmt: '%s-ec2-endpoint-rta-c'
               type: string
         - patchSetName: network-general
           type: PatchSet
