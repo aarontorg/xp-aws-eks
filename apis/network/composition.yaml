@@ -142,7 +142,7 @@ spec:
                 fmt: '%s-private-a'
               type: string
         - fromFieldPath: status.atProvider.id
-          toFieldPath: status.endpointSubnets[0]
+          toFieldPath: status.endpointSubnets[@]
           policy:
             mergeOptions:
               appendSlice: true
