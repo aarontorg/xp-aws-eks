@@ -1,9 +1,9 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: xnetworks.xp.sapns2.io
-  #labels:
-  #  network-type: no-eni
+  name: no-eni.xnetworks.xp.sapns2.io
+  labels:
+    network-type: no-eni
 spec:
   writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
