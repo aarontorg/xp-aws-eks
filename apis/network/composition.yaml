@@ -825,7 +825,7 @@ spec:
             serviceName: com.amazonaws.us-gov-west-1.ec2
             vpcEndpointType: Interface
             subnetConfiguration:
-              subnetIdSelector:
+              - subnetIdSelector:
                 matchControllerRef: true
                 matchLabels:
                   vpc-misc: endpoints
