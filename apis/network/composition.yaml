@@ -827,6 +827,8 @@ spec:
             subnetConfiguration:
               - subnetIdSelector:
                   matchControllerRef: true
+                  matchLabels:
+                    access: private
       name: ec2Endpoint
       patches:
         - fromFieldPath: spec.id
