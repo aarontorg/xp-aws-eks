@@ -142,12 +142,12 @@ spec:
             - string:
                 fmt: '%s-private-a'
               type: string
-        - fromFieldPath: status.atProvider.id
-          toFieldPath: status.endpointSubnets
-          policy:
-            mergeOptions:
-              appendSlice: true
-          type: ToCompositeFieldPath
+        #- fromFieldPath: status.atProvider.id
+        #  toFieldPath: status.endpointSubnets
+        #  policy:
+        #    mergeOptions:
+        #      appendSlice: true
+        #  type: ToCompositeFieldPath
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
         kind: Subnet
