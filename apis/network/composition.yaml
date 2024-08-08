@@ -959,34 +959,6 @@ spec:
               type: string
         - patchSetName: network-general
           type: PatchSet
-    - base:
-        apiVersion: ec2.aws.upbound.io/v1beta1
-        kind: VPCEndpointSubnetAssociation
-        spec:
-          forProvider:
-            subnetIdSelector:
-              matchControllerRef: true
-              matchLabels:
-                access: intra
-                zone: us-gov-west-1a
-      name: ec2Endpoint-sna-a-intra
-      patches:
-        - fromFieldPath: spec.id
-          toFieldPath: spec.forProvider.subnetIdSelector.matchLabels[networks.xp.sapns2.io/network-id]
-        - fromFieldPath: spec.id
-          toFieldPath: spec.forProvider.vpcEndpointIdRef.name
-          transforms:
-            - string:
-                fmt: '%s-ec2-endpoint'
-              type: string
-        - fromFieldPath: spec.id
-          toFieldPath: metadata.name
-          transforms:
-            - string:
-                fmt: '%s-ec2-endpoint-rta-a-intra'
-              type: string
-        - patchSetName: network-general
-          type: PatchSet
     ## VPCEndpointSecurityGroupAssociation - ec2
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
