@@ -142,7 +142,7 @@ spec:
                 fmt: '%s-private-a'
               type: string
         - fromFieldPath: status.atProvider.id
-          toFieldPath: status.endpointSubnets[@]
+          toFieldPath: status.endpointSubnets[0]
           policy:
             mergeOptions:
               appendSlice: true
@@ -191,7 +191,7 @@ spec:
                 fmt: '%s-private-b'
               type: string
         - fromFieldPath: status.atProvider.id
-          toFieldPath: status.endpointSubnets
+          toFieldPath: status.endpointSubnets[0]
           policy:
             mergeOptions:
               appendSlice: true
@@ -240,7 +240,7 @@ spec:
                 fmt: '%s-private-c'
               type: string
         - fromFieldPath: status.atProvider.id
-          toFieldPath: status.endpointSubnets
+          toFieldPath: status.endpointSubnets[0]
           policy:
             mergeOptions:
               appendSlice: true
