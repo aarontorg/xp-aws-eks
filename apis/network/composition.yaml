@@ -823,6 +823,9 @@ spec:
             privateDnsEnabled: true
             serviceName: com.amazonaws.us-gov-west-1.ec2
             vpcEndpointType: Interface
+            subnetConfiguration:
+              subnetIdSelector:
+                matchControllerRef: true
       name: ec2Endpoint
       patches:
         - fromFieldPath: spec.id
@@ -846,33 +849,33 @@ spec:
                 fmt: '%s-ec2-endpoint'
               type: string
     ## EndPointSubnetAccociation - ec2 - private
-    - base:
-        apiVersion: ec2.aws.upbound.io/v1beta1
-        kind: VPCEndpointSubnetAssociation
-        spec:
-          forProvider:
-            subnetIdSelector:
-              matchControllerRef: true
-              matchLabels:
-                access: private
-      name: ec2Endpoint-sna
-      patches:
-        - fromFieldPath: spec.id
-          toFieldPath: spec.forProvider.subnetIdSelector.matchLabels[networks.xp.sapns2.io/network-id]
-        - fromFieldPath: spec.id
-          toFieldPath: spec.forProvider.vpcEndpointIdRef.name
-          transforms:
-            - string:
-                fmt: '%s-ec2-endpoint'
-              type: string
-        - fromFieldPath: spec.id
-          toFieldPath: metadata.name
-          transforms:
-            - string:
-                fmt: '%s-ec2-endpoint-rta'
-              type: string
-        - patchSetName: network-general
-          type: PatchSet
+    #- base:
+    #    apiVersion: ec2.aws.upbound.io/v1beta1
+    #    kind: VPCEndpointSubnetAssociation
+    #    spec:
+    #      forProvider:
+    #        subnetIdSelector:
+    #          matchControllerRef: true
+    #          #matchLabels:
+    #          #  access: private
+    #  name: ec2Endpoint-sna
+    #  patches:
+    #    - fromFieldPath: spec.id
+    #      toFieldPath: spec.forProvider.subnetIdSelector.matchLabels[networks.xp.sapns2.io/network-id]
+    #    - fromFieldPath: spec.id
+    #      toFieldPath: spec.forProvider.vpcEndpointIdRef.name
+    #      transforms:
+    #        - string:
+    #            fmt: '%s-ec2-endpoint'
+    #          type: string
+    #    - fromFieldPath: spec.id
+    #      toFieldPath: metadata.name
+    #      transforms:
+    #        - string:
+    #            fmt: '%s-ec2-endpoint-rta'
+    #          type: string
+    #    - patchSetName: network-general
+    #      type: PatchSet
     ## VPCEndpointSecurityGroupAssociation - ec2
     - base:
         apiVersion: ec2.aws.upbound.io/v1beta1
