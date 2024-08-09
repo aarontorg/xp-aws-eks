@@ -58,9 +58,8 @@ spec:
             - id
             - eks
           status:
-            description: Get the private IP of the EC2 instance
+            type: object
             properties:
               clusterSecurityGroupId:
                 description: get the security group for the cluster
                 type: string
-            type: object
