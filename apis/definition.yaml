@@ -57,9 +57,3 @@ spec:
             required:
             - id
             - eks
-          status:
-            type: object
-            properties:
-              clusterSecurityGroupId:
-                description: get the security group for the cluster
-                type: string

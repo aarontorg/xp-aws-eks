@@ -99,11 +99,6 @@ spec:
         - fromFieldPath: spec.k8Version
           toFieldPath: spec.forProvider.version
           type: FromCompositeFieldPath
-        - fromFieldPath: status.atProvider.vpcConfig[0].clusterSecurityGroupId
-          policy:
-            fromFieldPath: Required
-          toFieldPath: status.clusterSecurityGroupId
-          type: ToCompositeFieldPath
         - fromFieldPath: status.atProvider.identity[0].oidc[0].issuer
           policy:
             fromFieldPath: Optional
@@ -125,6 +120,11 @@ spec:
             - string:
                 fmt: "%s-sec-group"
               type: string
+        - fromFieldPath: status.atProvider.vpcConfig[0].clusterSecurityGroupId
+          policy:
+            fromFieldPath: Required
+          toFieldPath: status.eks.clusterSecurityGroupId
+          type: ToCompositeFieldPath
         - fromFieldPath: spec.id
           toFieldPath: metadata.name
         - fromFieldPath: spec.id
@@ -364,14 +364,14 @@ spec:
               spec:
                 subnet: 100.64.1.0/24
       patches:
+        - fromFieldPath: status.eks.clusterSecurityGroupId
+          toFieldPath: spec.forProvider.manifest.spec.securityGroups[0]
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.manifest.spec.securityGroups[1]
           transforms:
             - string:
                 fmt: '%s-sec-group'
               type: string
-        - fromFieldPath: status.clusterSecurityGroupId
-          toFieldPath: spec.forProvider.manifest.spec.securityGroups[0]
         - fromFieldPath: spec.id
           toFieldPath: spec.providerConfigRef.name
         - fromFieldPath: spec.id
@@ -403,7 +403,7 @@ spec:
               spec:
                 subnet: 100.64.2.0/24
       patches:
-        - fromFieldPath: status.clusterSecurityGroupId
+        - fromFieldPath: status.eks.clusterSecurityGroupId
           toFieldPath: spec.forProvider.manifest.spec.securityGroups[0]
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.manifest.spec.securityGroups[1]
@@ -442,7 +442,7 @@ spec:
               spec:
                 subnet: 100.64.3.0/24
       patches:
-        - fromFieldPath: status.clusterSecurityGroupId
+        - fromFieldPath: status.eks.clusterSecurityGroupId
           toFieldPath: spec.forProvider.manifest.spec.securityGroups[0]
         - fromFieldPath: spec.id
           toFieldPath: spec.forProvider.manifest.spec.securityGroups[1]
