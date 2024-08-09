@@ -99,7 +99,7 @@ spec:
         - fromFieldPath: spec.k8Version
           toFieldPath: spec.forProvider.version
           type: FromCompositeFieldPath
-        - fromFieldPath: status.atProvider.vpcConfig.clusterSecurityGroupId
+        - fromFieldPath: status.atProvider.vpcConfig[0].clusterSecurityGroupId
           policy:
             fromFieldPath: Required
           toFieldPath: status.clusterSecurityGroupId
@@ -125,11 +125,6 @@ spec:
             - string:
                 fmt: "%s-sec-group"
               type: string
-        - fromFieldPath: status.atProvider.vpcConfig[0].clusterSecurityGroupId
-          policy:
-            fromFieldPath: Optional
-          toFieldPath: status.eks.clusterSecurityGroupId
-          type: ToCompositeFieldPath
         - fromFieldPath: spec.id
           toFieldPath: metadata.name
         - fromFieldPath: spec.id
