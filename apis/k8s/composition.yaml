@@ -372,19 +372,19 @@ spec:
               type: string
         - fromFieldPath: spec.id
           toFieldPath: spec.providerConfigRef.name
-        - fromFieldPath: spec.region
+        - fromFieldPath: spec.id
           toFieldPath: metadata.name
           transforms:
             - string:
-                fmt: '%s-a'
+                fmt: '%s-eni-intra-a'
                 type: Format
               type: string
           type: FromCompositeFieldPath
-        - fromFieldPath: spec.id
+        - fromFieldPath: spec.region
           toFieldPath: spec.forProvider.manifest.metadata.name
           transforms:
             - string:
-                fmt: '%s-eni-intra-a'
+                fmt: '%sa'
                 type: Format
               type: string
           type: FromCompositeFieldPath
@@ -409,19 +409,19 @@ spec:
               type: string
         - fromFieldPath: spec.id
           toFieldPath: spec.providerConfigRef.name
-        - fromFieldPath: spec.region
+        - fromFieldPath: spec.id
           toFieldPath: metadata.name
           transforms:
             - string:
-                fmt: '%s-b'
+                fmt: '%s-eni-intra-b'
                 type: Format
               type: string
           type: FromCompositeFieldPath
-        - fromFieldPath: spec.id
+        - fromFieldPath: spec.region
           toFieldPath: spec.forProvider.manifest.metadata.name
           transforms:
             - string:
-                fmt: '%s-eni-intra-b'
+                fmt: '%sb'
                 type: Format
               type: string
           type: FromCompositeFieldPath
@@ -446,19 +446,19 @@ spec:
               type: string
         - fromFieldPath: spec.id
           toFieldPath: spec.providerConfigRef.name
-        - fromFieldPath: spec.region
+        - fromFieldPath: spec.id
           toFieldPath: metadata.name
           transforms:
             - string:
-                fmt: '%s-c'
+                fmt: '%s-eni-intra-c'
                 type: Format
               type: string
           type: FromCompositeFieldPath
-        - fromFieldPath: spec.id
+        - fromFieldPath: spec.region
           toFieldPath: spec.forProvider.manifest.metadata.name
           transforms:
             - string:
-                fmt: '%s-eni-intra-c'
+                fmt: '%sc'
                 type: Format
               type: string
           type: FromCompositeFieldPath
