@@ -99,6 +99,11 @@ spec:
         - fromFieldPath: spec.k8Version
           toFieldPath: spec.forProvider.version
           type: FromCompositeFieldPath
+        - fromFieldPath: status.atProvider.vpcConfig.clusterSecurityGroupId
+          policy:
+            fromFieldPath: Required
+          toFieldPath: status.clusterSecurityGroupId
+          type: ToCompositeFieldPath
         - fromFieldPath: status.atProvider.identity[0].oidc[0].issuer
           policy:
             fromFieldPath: Optional
@@ -364,12 +369,8 @@ spec:
               spec:
                 subnet: 100.64.1.0/24
       patches:
-        - fromFieldPath: spec.id
+        - fromFieldPath: status.clusterSecurityGroupId
           toFieldPath: spec.forProvider.manifest.spec.securityGroups[0]
-          transforms:
-            - string:
-                fmt: '%s-sec-group'
-              type: string
         - fromFieldPath: spec.id
           toFieldPath: spec.providerConfigRef.name
         - fromFieldPath: spec.id
@@ -401,12 +402,8 @@ spec:
               spec:
                 subnet: 100.64.2.0/24
       patches:
-        - fromFieldPath: spec.id
+        - fromFieldPath: status.clusterSecurityGroupId
           toFieldPath: spec.forProvider.manifest.spec.securityGroups[0]
-          transforms:
-            - string:
-                fmt: '%s-sec-group'
-              type: string
         - fromFieldPath: spec.id
           toFieldPath: spec.providerConfigRef.name
         - fromFieldPath: spec.id
@@ -438,12 +435,14 @@ spec:
               spec:
                 subnet: 100.64.3.0/24
       patches:
-        - fromFieldPath: spec.id
+        - fromFieldPath: status.clusterSecurityGroupId
           toFieldPath: spec.forProvider.manifest.spec.securityGroups[0]
-          transforms:
-            - string:
-                fmt: '%s-sec-group'
-              type: string
+        #- fromFieldPath: spec.id
+        #  toFieldPath: spec.forProvider.manifest.spec.securityGroups[0]
+        #  transforms:
+        #    - string:
+        #        fmt: '%s-sec-group'
+        #      type: string
         - fromFieldPath: spec.id
           toFieldPath: spec.providerConfigRef.name
         - fromFieldPath: spec.id
